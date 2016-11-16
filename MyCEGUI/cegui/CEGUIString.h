@@ -320,191 +320,61 @@ public:
 		assign(std_str, str_idx, str_num);
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// Construction via UTF-8 stream (for straight ASCII use, only codes 0x00 - 0x7f are valid)
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Constructs a new String object and initialise it using the provided utf8 encoded string buffer.
-
-	\param utf8_str
-		Pointer to a buffer containing a null-terminated Unicode string encoded as utf8 data.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\return
-		Nothing
-
-	\exception std::length_error	Thrown if resulting String object would be too big.
-	*/
+	//用utf8字符串进行初始化
+	//exception std::length_error	Thrown if resulting String object would be too big.
 	String(const utf8* utf8_str)
 	{
 		init();
 		assign(utf8_str);
 	}
 
-	/*!
-	\brief
-		Constructs a new String object and initialise it using the provided utf8 encoded string buffer.
-
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param utf8_str
-		Pointer to a buffer containing Unicode string data encoded as utf8.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param chars_len
-		Length of the provided utf8 string in code units (not code-points).
-
-	\return
-		Nothing
-
-	\exception std::length_error	Thrown if resulting String object would be too big.
-	*/
+	//exception std::length_error	Thrown if resulting String object would be too big.
 	String(const utf8* utf8_str, size_type chars_len)
 	{
 		init();
 		assign(utf8_str, chars_len);
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Construction via code-point (using a UTF-32 code unit)
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Constructs a new String that is initialised with the specified code point
-
-	\param num
-		The number of times \a code_point is to be put into new String object
-
-	\param code_point
-		The Unicode code point to be used when initialising the String object
-
-	\return
-		Nothing
-
-	\exception std::length_error	Thrown if resulting String object would be too big.
-	*/
+	//将一个utf32字符重复num遍
+	//exception std::length_error	Thrown if resulting String object would be too big.
 	String(size_type num, utf32 code_point)
 	{
 		init();
 		assign(num, code_point);
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Construction via iterator
-	//////////////////////////////////////////////////////////////////////////
-	// Create string with characters in the range [beg, end)
-	/*!
-	\brief
-		Construct a new string object and initialise it with code-points from the range [beg, end).
-
-	\param beg
-		Iterator describing the start of the data to be used when initialising the String object
-
-	\param end
-		Iterator describing the (exclusive) end of the data to be used when initialising the String object
-
-	\return
-		Nothing
-	*/
 	String(const_iterator iter_beg, const_iterator iter_end)
 	{
 		init();
-		append(iter_beg, iter_end);
+		append(iter_beg, iter_end); //在字符串末尾插入数据
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// Construction via c-string
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Constructs a new String object and initialise it using the provided c-string.
-
-	\param c_str
-		Pointer to a c-string.
-
-	\return
-		Nothing
-
-	\exception std::length_error	Thrown if resulting String object would be too big.
-	*/
+	//用c-string进行初始化
+	//exception std::length_error	Thrown if resulting String object would be too big.
 	String(const char* cstr)
 	{
 		init();
 		assign(cstr);
 	}
 
-	/*!
-	\brief
-		Constructs a new String object and initialise it using characters from the provided char array.
-
-	\param chars
-		char array.
-
-	\param chars_len
-		Number of chars from the array to be used.
-
-	\return
-		Nothing
-
-	\exception std::length_error	Thrown if resulting String object would be too big.
-	*/
+	//exception std::length_error	Thrown if resulting String object would be too big.
 	String(const char* chars, size_type chars_len)
 	{
 		init();
 		assign(chars, chars_len);
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// Size operations
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Returns the size of the String in code points
-
-	\return
-		Number of code points currently in the String
-	*/
+	//字符长度，不包含结尾符，内部以utf32进行编码
 	size_type	size(void) const
 	{
 		return d_cplength;
 	}
 
-	/*!
-	\brief
-		Returns the size of the String in code points
-
-	\return
-		Number of code points currently in the String
-	*/
 	size_type	length(void) const
 	{
 		return d_cplength;
 	}
 
-	/*!
-	\brief
-		Returns true if the String is empty
-
-	\return
-		true if the String is empty, else false.
-	*/
 	bool	empty(void) const
 	{
 		return	(d_cplength == 0);
@@ -516,39 +386,13 @@ public:
 		return (((size_type)-1) / sizeof(utf32));
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Capacity Operations
-	//////////////////////////////////////////////////////////////////////////
-	// return the number of code points the string could hold without re-allocation
-	// (due to internal encoding this will always report the figure for worst-case encoding, and could even be < size()!)
-	/*!
-	\brief
-		Return the number of code points that the String could hold before a re-allocation would be required.
-
-	\return
-		Size of the current reserve buffer.  This is the maximum number of code points the String could hold before a buffer
-		re-allocation would be required
-	*/
+	//能够容纳的字符数
 	size_type capacity(void) const
 	{
 		return d_reserve - 1;
 	}
 
-	// reserve internal memory for at-least 'num' code-points (characters).  if num is 0, request is shrink-to-fit.
-	/*!
-	\brief
-		Specifies the amount of reserve capacity to allocate.
-
-	\param num
-		The number of code points to allocate space for.  If \a num is larger that the current reserve, then a re-allocation will occur.  If
-		\a num is smaller than the current reserve (but not 0) the buffer may be shrunk to the larger of the specified number, or the current
-		String size (operation is currently not implemented).  If \a num is 0, then the buffer is re-allocated to fit the current String size.
-
-	\return
-		Nothing
-
-	\exception std::length_error	Thrown if resulting String object would be too big.
-	*/
+	//exception std::length_error	Thrown if resulting String object would be too big.
 	void	reserve(size_type num = 0)
 	{
 		if (num == 0)
@@ -557,58 +401,12 @@ public:
 			grow(num);
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Comparisons
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Compares this String with the String 'str'.
-
-	\note
-		This does currently not properly consider Unicode and / or the system locale.
-
-	\param str
-		The String object that is to compared with this String.
-
-	\return
-		-  0 if the String objects are equal
-		- <0 if this String is lexicographically smaller than \a str
-		- >0 if this String is lexicographically greater than \a str
-	*/
 	int		compare(const String& str) const
 	{
 		return compare(0, d_cplength, str);
 	}
 
-	/*!
-	\brief
-		Compares code points from this String with code points from the String 'str'.
-
-	\note
-		This does currently not properly consider Unicode and / or the system locale.
-
-	\param idx
-		Index of the first code point from this String to consider.
-
-	\param len
-		Maximum number of code points from this String to consider.
-
-	\param str
-		The String object that is to compared with this String.
-
-	\param str_idx
-		Index of the first code point from String \a str to consider.
-
-	\param str_len
-		Maximum number of code points from String \a str to consider
-
-	\return
-		-  0 if the specified sub-strings are equal
-		- <0 if specified sub-strings are lexicographically smaller than \a str
-		- >0 if specified sub-strings are lexicographically greater than \a str
-
-	\exception std::out_of_range	Thrown if either \a idx or \a str_idx are invalid.
-	*/
+	//exception std::out_of_range	Thrown if either \a idx or \a str_idx are invalid.
 	int		compare(size_type idx, size_type len, const String& str, size_type str_idx = 0, size_type str_len = npos) const
 	{
 		if ((d_cplength < idx) || (str.d_cplength < str_idx))
@@ -625,65 +423,13 @@ public:
 		return (val != 0) ? ((val < 0) ? -1 : 1) : (len < str_len) ? -1 : (len == str_len) ? 0 : 1;
 	}
 
-
-	/*!
-	\brief
-		Compares this String with the std::string 'std_str'.
-
-	\note
-		This does currently not properly consider Unicode and / or the system locale.
-
-	\param std_str
-		The std::string object that is to compared with this String.
-
-	\note
-		Characters from \a std_str are considered to represent Unicode code points in the range 0x00..0xFF.  No translation of
-		the encountered data is performed.
-
-	\return
-		-  0 if the string objects are equal
-		- <0 if this string is lexicographically smaller than \a std_str
-		- >0 if this string is lexicographically greater than \a std_str
-	*/
+	//和标准库string进行比较，并不支持多字节编码
 	int		compare(const std::string& std_str) const
 	{
 		return compare(0, d_cplength, std_str);
 	}
 
-
-	/*!
-	\brief
-		Compares code points from this String with code points from the std::string 'std_str'.
-
-	\note
-		This does currently not properly consider Unicode and / or the system locale.
-
-	\param idx
-		Index of the first code point from this String to consider.
-
-	\param len
-		Maximum number of code points from this String to consider.
-
-	\param std_str
-		The std::string object that is to compared with this String.
-
-	\note
-		Characters from \a std_str are considered to represent Unicode code points in the range 0x00..0xFF.  No translation of
-		the encountered data is performed.
-
-	\param str_idx
-		Index of the first character from std::string \a std_str to consider.
-
-	\param str_len
-		Maximum number of characters from std::string \a std_str to consider
-
-	\return
-		-  0 if the specified sub-strings are equal
-		- <0 if specified sub-strings are lexicographically smaller than \a std_str
-		- >0 if specified sub-strings are lexicographically greater than \a std_str
-
-	\exception std::out_of_range	Thrown if either \a idx or \a str_idx are invalid.
-	*/
+	//exception std::out_of_range	Thrown if either \a idx or \a str_idx are invalid.
 	int		compare(size_type idx, size_type len, const std::string& std_str, size_type str_idx = 0, size_type str_len = npos) const
 	{
 		if (d_cplength < idx)
@@ -704,100 +450,20 @@ public:
 	}
 
 
-	/*!
-	\brief
-		Compares this String with the null-terminated utf8 encoded 'utf8_str'.
-
-	\note
-		This does currently not properly consider Unicode and / or the system locale.
-
-	\param utf8_str
-		The buffer containing valid Unicode data encoded as utf8 that is to compared with this String.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\return
-		-  0 if the strings are equal
-		- <0 if this string is lexicographically smaller than \a utf8_str
-		- >0 if this string is lexicographically greater than \a utf8_str
-	*/
+	//和utf8字符串进行比较
 	int		compare(const utf8* utf8_str) const
 	{
 		return compare(0, d_cplength, utf8_str, encoded_size(utf8_str));
 	}
 
-
-	/*!
-	\brief
-		Compares code points from this String with the null-terminated utf8 encoded 'utf8_str'.
-
-	\note
-		This does currently not properly consider Unicode and / or the system locale.
-
-	\param idx
-		Index of the first code point from this String to consider.
-
-	\param len
-		Maximum number of code points from this String to consider.
-
-	\param utf8_str
-		The buffer containing valid Unicode data encoded as utf8 that is to compared with this String.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\return
-		-  0 if the specified sub-strings are equal
-		- <0 if specified sub-strings are lexicographically smaller than \a utf8_str
-		- >0 if specified sub-strings are lexicographically greater than \a utf8_str
-
-	\exception std::out_of_range	Thrown if \a idx is invalid.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid.
 	int		compare(size_type idx, size_type len, const utf8* utf8_str) const
 	{
 		return compare(idx, len, utf8_str, encoded_size(utf8_str));
 	}
 
-	/*!
-	\brief
-		Compares code points from this String with the utf8 encoded data in buffer 'utf8_str'.
-
-	\note
-		This does currently not properly consider Unicode and / or the system locale.
-
-	\param idx
-		Index of the first code point from this String to consider.
-
-	\param len
-		Maximum number of code points from this String to consider.
-
-	\param utf8_str
-		The buffer containing valid Unicode data encoded as utf8 that is to compared with this String.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param str_cplen
-		The number of encoded code points in the buffer \a utf8_str (this is not the same as the number of code units).
-
-	\return
-		-  0 if the specified sub-strings are equal
-		- <0 if specified sub-strings are lexicographically smaller than \a utf8_str
-		- >0 if specified sub-strings are lexicographically greater than \a utf8_str
-
-	\exception std::out_of_range	Thrown if \a idx is invalid.
-	\exception std::length_error	Thrown if \a str_cplen is set to npos.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid.
+	//exception std::length_error	Thrown if \a str_cplen is set to npos.
 	int		compare(size_type idx, size_type len, const utf8* utf8_str, size_type str_cplen) const
 	{
 		if (d_cplength < idx)
@@ -814,84 +480,19 @@ public:
 		return (val != 0) ? ((val < 0) ? -1 : 1) : (len < str_cplen) ? -1 : (len == str_cplen) ? 0 : 1;
 	}
 
-
-	/*!
-	\brief
-		Compares this String with the given c-string.
-
-	\note
-		This does currently not properly consider Unicode and / or the system locale.
-
-	\param c_str
-		The c-string that is to compared with this String.
-
-	\return
-		-  0 if the strings are equal
-		- <0 if this string is lexicographically smaller than \a c_str
-		- >0 if this string is lexicographically greater than \a c_str
-	*/
 	int		compare(const char* cstr) const
 	{
 		return compare(0, d_cplength, cstr, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Compares code points from this String with the given c-string.
-
-	\note
-		This does currently not properly consider Unicode and / or the system locale.
-
-	\param idx
-		Index of the first code point from this String to consider.
-
-	\param len
-		Maximum number of code points from this String to consider.
-
-	\param c_str
-		The c-string that is to compared with this String.
-
-	\return
-		-  0 if the specified sub-strings are equal
-		- <0 if specified sub-strings are lexicographically smaller than \a c_str
-		- >0 if specified sub-strings are lexicographically greater than \a c_str
-
-	\exception std::out_of_range	Thrown if \a idx is invalid.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid.
 	int		compare(size_type idx, size_type len, const char* cstr) const
 	{
 		return compare(idx, len, cstr, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Compares code points from this String with chars in the given char array.
-
-	\note
-		This does currently not properly consider Unicode and / or the system locale.
-
-	\param idx
-		Index of the first code point from this String to consider.
-
-	\param len
-		Maximum number of code points from this String to consider.
-
-	\param chars
-		The array containing the chars that are to compared with this String.
-
-	\param chars_len
-		The number of chars in the array.
-
-	\return
-		-  0 if the specified sub-strings are equal
-		- <0 if specified sub-strings are lexicographically smaller than \a chars
-		- >0 if specified sub-strings are lexicographically greater than \a chars
-
-	\exception std::out_of_range	Thrown if \a idx is invalid.
-	\exception std::length_error	Thrown if \a chars_len is set to npos.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid.
+	//exception std::length_error	Thrown if \a chars_len is set to npos.
 	int		compare(size_type idx, size_type len, const char* chars, size_type chars_len) const
 	{
 		if (d_cplength < idx)
@@ -908,60 +509,19 @@ public:
 		return (val != 0) ? ((val < 0) ? -1 : 1) : (len < chars_len) ? -1 : (len == chars_len) ? 0 : 1;
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// Character access
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Returns the code point at the given index.
-
-	\param idx
-		Zero based index of the code point to be returned.
-
-	\note
-		- For constant strings length()/size() provide a valid index and will access the default utf32 value.
-		- For non-constant strings length()/size() is an invalid index, and acceesing (especially writing) this index could cause string corruption.
-
-	\return
-		The utf32 code point at the given index within the String.
-	*/
+	//返回左值
 	reference	operator[](size_type idx)
 	{
 		return (ptr()[idx]);
 	}
 
-	/*!
-	\brief
-		Returns the code point at the given index.
-
-	\param idx
-		Zero based index of the code point to be returned.
-
-	\note
-		- For constant strings length()/size() provide a valid index and will access the default utf32 value.
-		- For non-constant strings length()/size() is an invalid index, and acceesing (especially writing) this index could cause string corruption.
-
-	\return
-		The utf32 code point at the given index within the String.
-	*/
+	//const对象返回右值
 	value_type	operator[](size_type idx) const
 	{
 		return ptr()[idx];
 	}
 
-	/*!
-	\brief
-		Returns the code point at the given index.
-
-	\param idx
-		Zero based index of the code point to be returned.
-
-	\return
-		The utf32 code point at the given index within the String.
-
-	\exception std::out_of_range	Thrown if \a idx is >= length().
-	*/
+	//exception std::out_of_range	Thrown if \a idx is >= length().
 	reference	at(size_type idx)
 	{
 		if (d_cplength <= idx)
@@ -970,18 +530,7 @@ public:
 		return ptr()[idx];
 	}
 
-	/*!
-	\brief
-		Returns the code point at the given index.
-
-	\param idx
-		Zero based index of the code point to be returned.
-
-	\return
-		The utf32 code point at the given index within the String.
-
-	\exception std::out_of_range	Thrown if \a idx is >= length().
-	*/
+	//exception std::out_of_range	Thrown if \a idx is >= length().
 	const_reference	at(size_type idx) const
 	{
 		if (d_cplength <= idx)
@@ -990,41 +539,12 @@ public:
 		return ptr()[idx];
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// C-Strings and arrays
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Returns contents of the String as a null terminated string of utf8 encoded data.
-
-	\return
-		Pointer to a char buffer containing the contents of the String encoded as null-terminated utf8 data.
-
-	\note
-		The buffer returned from this function is owned by the String object.
-
-	\note
-		Any function that modifies the String data will invalidate the buffer returned by this call.
-	*/
+	//返回utf8字符串
 	const char* c_str(void) const
 	{
 		return (const char*)build_utf8_buff();
 	}
 
-	/*!
-	\brief
-		Returns contents of the String as utf8 encoded data.
-
-	\return
-		Pointer to a buffer containing the contents of the String encoded utf8 data.
-
-	\note
-		The buffer returned from this function is owned by the String object.
-
-	\note
-		Any function that modifies the String data will invalidate the buffer returned by this call.
-	*/
 	const utf8* data(void) const
 	{
 		return build_utf8_buff();
@@ -1044,26 +564,7 @@ public:
 
 	// copy, at most, 'len' code-points of the string, begining with code-point 'idx', into the array 'buf' as valid utf8 encoded data
 	// return number of utf8 code units placed into the buffer
-	/*!
-	\brief
-		Copies an area of the String into the provided buffer as encoded utf8 data.
-
-	\param buf
-		Pointer to a buffer that is to receive the encoded data (this must be big enough to hold the encoded data)
-
-	\param len
-		Maximum number of code points from the String that should be encoded into the buffer
-
-	\param idx
-		Index of the first code point to be encoded into the buffer
-
-	\return
-		The number of utf8 encoded code units transferred to the buffer.
-
-		\note A code unit does not equal a code point.  A utf32 code point, when encoded as utf8, can occupy between 1 and 4 code units.
-
-	\exception std::out_of_range	Thrown if \a idx was invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx was invalid for this String.
 	size_type	copy(utf8* buf, size_type len = npos, size_type idx = 0) const
 	{
 		if (d_cplength < idx)
@@ -1075,25 +576,8 @@ public:
 		return encode(&ptr()[idx], buf, npos, len);
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// UTF8 Encoding length information
-	//////////////////////////////////////////////////////////////////////////
-	// return the number of bytes required to hold 'num' code-points, starting at code-point 'idx', of the the string when encoded as utf8 data.
-	/*!
-	\brief
-		Return the number of utf8 code units required to hold an area of the String when encoded as utf8 data
-
-	\param num
-		Maximum number of code points to consider when calculating utf8 encoded size.
-
-	\param idx
-		Index of the first code point to consider when calculating the utf8 encoded size
-
-	\return
-		The number of utf8 code units (bytes) required to hold the specified sub-string when encoded as utf8 data.
-
-	\exception std::out_of_range	Thrown if \a idx was invalid for this String.
-	*/
+	//The number of utf8 code units (bytes) required to hold the specified sub-string when encoded as utf8 data.
+	//exception std::out_of_range	Thrown if \a idx was invalid for this String.
 	size_type	utf8_stream_len(size_type num = npos, size_type idx = 0) const
 	{
 		using namespace std;
@@ -1106,42 +590,12 @@ public:
 		return encoded_size(&ptr()[idx], ceguimin(num, maxlen));
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Assignment Functions
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Assign the value of String \a str to this String
-
-	\param str
-		String object containing the string value to be assigned.
-
-	\return
-		This String after the assignment has happened
-	*/
 	String&	operator=(const String& str)
 	{
 		return assign(str);
 	}
 
-	/*!
-	\brief
-		Assign a sub-string of String \a str to this String
-
-	\param str
-		String object containing the string data to be assigned.
-
-	\param str_idx
-		Index of the first code point in \a str that is to be assigned
-
-	\param str_num
-		Maximum number of code points from \a str that are be be assigned
-
-	\return
-		This String after the assignment has happened
-
-	\exception std::out_of_range	Thrown if str_idx is invalid for \a str
-	*/
+	//exception std::out_of_range	Thrown if str_idx is invalid for \a str
 	String&	assign(const String& str, size_type str_idx = 0, size_type str_num = npos)
 	{
 		if (str.d_cplength < str_idx)
@@ -1157,22 +611,7 @@ public:
 		return *this;
 	}
 
-	/*!
-	\brief
-		Assign the value of std::string \a std_str to this String
-
-	\note
-		The characters of \a std_str are taken to be unencoded data which represent Unicode code points 0x00..0xFF.  No translation of
-		the provided data will occur.
-
-	\param std_str
-		std::string object containing the string value to be assigned.
-
-	\return
-		This String after the assignment has happened
-
-	\exception std::length_error	Thrown if the resulting String would have been too large.
-	*/
+	//exception std::length_error	Thrown if the resulting String would have been too large.
 	String&	operator=(const std::string& std_str)
 	{
 		return assign(std_str);
@@ -1199,73 +638,21 @@ public:
 		return *this;
 	}
 
-	/*!
-	\brief
-		Assign to this String the string value represented by the given null-terminated utf8 encoded data
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param utf8_str
-		Buffer containing valid null-terminated utf8 encoded data
-
-	\return
-		This String after the assignment has happened
-
-	\exception std::length_error	Thrown if the resulting String would have been too large.
-	*/
+	//exception std::length_error	Thrown if the resulting String would have been too large.
 	String&	operator=(const utf8* utf8_str)
 	{
 		return assign(utf8_str, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Assign to this String the string value represented by the given null-terminated utf8 encoded data
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param utf8_str
-		Buffer containing valid null-terminated utf8 encoded data
-
-	\return
-		This String after the assignment has happened
-
-	\exception std::length_error	Thrown if the resulting String would have been too large.
-	*/
+	//utf8字符串以0结尾
+	//exception std::length_error	Thrown if the resulting String would have been too large.
 	String&	assign(const utf8* utf8_str)
 	{
 		return assign(utf8_str, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Assign to this String the string value represented by the given utf8 encoded data
 
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param utf8_str
-		Buffer containing valid utf8 encoded data
-
-	\param str_num
-		Number of code units (not code points) in the buffer pointed to by \a utf8_str
-
-	\return
-		This String after the assignment has happened
-
-	\exception std::length_error	Thrown if the resulting String would have been too large, or if str_num is 'npos'.
-	*/
+	//exception std::length_error	Thrown if the resulting String would have been too large, or if str_num is 'npos'.
 	String&	assign(const utf8* utf8_str, size_type str_num)
 	{
 		if (str_num == npos)
@@ -1274,41 +661,18 @@ public:
 		size_type enc_sze = encoded_size(utf8_str, str_num);
 
 		grow(enc_sze);
+		//此时d_reserve是增长后的缓冲区长度
 		encode(utf8_str, ptr(), d_reserve, str_num);
 		setlen(enc_sze);
 		return *this;
 	}
 
-	/*!
-	\brief
-		Assigns the specified utf32 code point to this String.  Result is always a String 1 code point in length.
-
-	\param code_point
-		Valid utf32 Unicode code point to be assigned to the string
-
-	\return
-		This String after assignment
-	*/
 	String&	operator=(utf32 code_point)
 	{
 		return assign(1, code_point);
 	}
 
-	/*!
-	\brief
-		Assigns the specified code point repeatedly to the String
-
-	\param num
-		The number of times to assign the code point
-
-	\param code_point
-		Valid utf32 Unicode code point to be assigned to the string
-
-	\return
-		This String after assignment.
-
-	\exception std::length_error	Thrown if \a num was 'npos'
-	*/
+	//exception std::length_error	Thrown if \a num was 'npos'
 	String&	assign(size_type num, utf32 code_point)
 	{
 		if (num == npos)
@@ -1324,58 +688,19 @@ public:
 		return *this;
 	}
 
-
-	/*!
-	\brief
-		Assign to this String the given C-string.
-
-	\param c_str
-		Pointer to a valid C style string.
-
-	\return
-		This String after the assignment has happened
-
-	\exception std::length_error	Thrown if the resulting String would have been too large.
-	*/
 	String&	operator=(const char* cstr)
 	{
 		return assign(cstr, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Assign to this String the given C-string.
-
-	\param c_str
-		Pointer to a valid C style string.
-
-	\return
-		This String after the assignment has happened
-
-	\exception std::length_error	Thrown if the resulting String would have been too large.
-	*/
+	//exception std::length_error	Thrown if the resulting String would have been too large.
 	String&	assign(const char* cstr)
 	{
 		return assign(cstr, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Assign to this String a number of chars from a char array.
-
-	\param chars
-		char array.
-
-	\param chars_len
-		Number of chars to be assigned.
-
-	\return
-		This String after the assignment has happened
-
-	\exception std::length_error	Thrown if the resulting String would have been too large.
-	*/
+	//不支持多字节编码
+	//exception std::length_error	Thrown if the resulting String would have been too large.
 	String&	assign(const char* chars, size_type chars_len)
 	{
 		grow(chars_len);
@@ -1390,17 +715,6 @@ public:
 		return *this;
 	}
 
-
-	/*!
-	\brief
-		Swaps the value of this String with the given String \a str
-
-	\param str
-		String object whos value is to be swapped with this String.
-
-	\return
-		Nothing
-	*/
 	void	swap(String& str)
 	{
 		size_type	temp_len	= d_cplength;
@@ -1427,45 +741,14 @@ public:
 
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Appending Functions
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Appends the String \a str
-
-	\param str
-		String object that is to be appended
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String&	operator+=(const String& str)
 	{
 		return append(str);
 	}
 
-	/*!
-	\brief
-		Appends a sub-string of the String \a str
-
-	\param str
-		String object containing data to be appended
-
-	\param str_idx
-		Index of the first code point to be appended
-
-	\param str_num
-		Maximum number of code points to be appended
-
-	\return
-		This String after the append operation
-
-	\exception std::out_of_range	Thrown if \a str_idx is invalid for \a str.
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a str_idx is invalid for \a str.
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String& append(const String& str, size_type str_idx = 0, size_type str_num = npos)
 	{
 		if (str.d_cplength < str_idx)
@@ -1480,51 +763,14 @@ public:
 		return *this;
 	}
 
-
-	/*!
-	\brief
-		Appends the std::string \a std_str
-
-	\param std_str
-		std::string object that is to be appended
-
-	\note
-		The characters of \a std_str are taken to be unencoded data which represent Unicode code points 0x00..0xFF.  No translation of
-		the provided data will occur.
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String&	operator+=(const std::string& std_str)
 	{
 		return append(std_str);
 	}
 
-	/*!
-	\brief
-		Appends a sub-string of the std::string \a std_str
-
-	\param std_str
-		std::string object containing data to be appended
-
-	\note
-		The characters of \a std_str are taken to be unencoded data which represent Unicode code points 0x00..0xFF.  No translation of
-		the provided data will occur.
-
-	\param str_idx
-		Index of the first character to be appended
-
-	\param str_num
-		Maximum number of characters to be appended
-
-	\return
-		This String after the append operation
-
-	\exception std::out_of_range	Thrown if \a str_idx is invalid for \a std_str.
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a str_idx is invalid for \a std_str.
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String& append(const std::string& std_str, size_type str_idx = 0, size_type str_num = npos)
 	{
 		if (std_str.size() < str_idx)
@@ -1545,75 +791,19 @@ public:
 		return *this;
 	}
 
-
-	/*!
-	\brief
-		Appends to the String the null-terminated utf8 encoded data in the buffer utf8_str.
-
-	\param utf8_str
-		buffer holding the null-terminated utf8 encoded data that is to be appended
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String&	operator+=(const utf8* utf8_str)
 	{
 		return append(utf8_str, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Appends to the String the null-terminated utf8 encoded data in the buffer utf8_str.
-
-	\param utf8_str
-		Buffer holding the null-terminated utf8 encoded data that is to be appended
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String& append(const utf8* utf8_str)
 	{
 		return append(utf8_str, utf_length(utf8_str));
 	}
 
-
-	/*!
-	\brief
-		Appends to the String the utf8 encoded data in the buffer utf8_str.
-
-	\param utf8_str
-		Buffer holding the utf8 encoded data that is to be appended
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param len
-		Number of code units (not code points) in the buffer to be appended
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if resulting String would be too large, or if \a len was 'npos'
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large, or if \a len was 'npos'
 	String& append(const utf8* utf8_str, size_type len)
 	{
 		if (len == npos)
@@ -1629,39 +819,13 @@ public:
 		return *this;
 	}
 
-
-	/*!
-	\brief
-		Appends a single code point to the string
-
-	\param code_point
-		utf32 Unicode code point that is to be appended
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if resulting String would be too long.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too long.
 	String& operator+=(utf32 code_point)
 	{
 		return append(1, code_point);
 	}
 
-	/*!
-	\brief
-		Appends a single code point multiple times to the string
-
-	\param num
-		Number of copies of the code point to be appended
-
-	\param code_point
-		utf32 Unicode code point that is to be appended
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if resulting String would be too long, or if \a num was 'npos'.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too long, or if \a num was 'npos'.
 	String& append(size_type num, utf32 code_point)
 	{
 		if (num == npos)
@@ -1680,95 +844,32 @@ public:
 		return *this;
 	}
 
-	/*!
-	\brief
-		Appends a single code point to the string
-
-	\param code_point
-		utf32 Unicode code point that is to be appended
-
-	\return
-		Nothing
-
-	\exception std::length_error	Thrown if resulting String would be too long.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too long.
 	void	push_back(utf32 code_point)
 	{
 		append(1, code_point);
 	}
 
-	/*!
-	\brief
-		Appends the code points in the reange [beg, end)
-
-	\param beg
-		Iterator describing the start of the range to be appended
-
-	\param end
-		Iterator describing the (exclusive) end of the range to be appended.
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if the resulting string would be too large.
-	*/
+	//在字符串末尾插入数据
+	//exception std::length_error	Thrown if the resulting string would be too large.
 	String&	append(const_iterator iter_beg, const_iterator iter_end)
 	{
 		return replace(end(), end(), iter_beg, iter_end);
 	}
 
-
-	/*!
-	\brief
-		Appends to the String the given c-string.
-
-	\param c_str
-		c-string that is to be appended.
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String&	operator+=(const char* cstr)
 	{
 		return append(cstr, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Appends to the String the given c-string.
-
-	\param c_str
-		c-string that is to be appended.
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String& append(const char* cstr)
 	{
 		return append(cstr, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Appends to the String chars from the given char array.
-
-	\param chars
-		char array holding the chars that are to be appended
-
-	\param chars_len
-		Number of chars to be appended
-
-	\return
-		This String after the append operation
-
-	\exception std::length_error	Thrown if resulting String would be too large, or if \a chars_len was 'npos'
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large, or if \a chars_len was 'npos'
 	String& append(const char* chars, size_type chars_len)
 	{
 		if (chars_len == npos)
@@ -1788,53 +889,15 @@ public:
 		return *this;
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// Insertion Functions
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Inserts the given String object at the specified position.
-
-	\param idx
-		Index where the string is to be inserted.
-
-	\param str
-		String object that is to be inserted.
-
-	\return
-		This String after the insert.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String&	insert(size_type idx, const String& str)
 	{
 		return insert(idx, str, 0, npos);
 	}
 
-	/*!
-	\brief
-		Inserts a sub-string of the given String object at the specified position.
-
-	\param idx
-		Index where the string is to be inserted.
-
-	\param str
-		String object containing data to be inserted.
-
-	\param str_idx
-		Index of the first code point from \a str to be inserted.
-
-	\param str_num
-		Maximum number of code points from \a str to be inserted.
-
-	\return
-		This String after the insert.
-
-	\exception std::out_of_range	Thrown if \a idx or \a str_idx are out of range.
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a idx or \a str_idx are out of range.
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String& insert(size_type idx, const String& str, size_type str_idx, size_type str_num)
 	{
 		if ((d_cplength < idx) || (str.d_cplength < str_idx))
@@ -1852,57 +915,15 @@ public:
 		return *this;
 	}
 
-	/*!
-	\brief
-		Inserts the given std::string object at the specified position.
-
-	\param idx
-		Index where the std::string is to be inserted.
-
-	\param std_str
-		std::string object that is to be inserted.
-
-	\note
-		The characters of \a std_str are taken to be unencoded data which represent Unicode code points 0x00..0xFF.  No translation of
-		the provided data will occur.
-
-	\return
-		This String after the insert.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String&	insert(size_type idx, const std::string& std_str)
 	{
 		return insert(idx, std_str, 0, npos);
 	}
 
-	/*!
-	\brief
-		Inserts a sub-string of the given std::string object at the specified position.
-
-	\param idx
-		Index where the string is to be inserted.
-
-	\param std_str
-		std::string object containing data to be inserted.
-
-	\note
-		The characters of \a std_str are taken to be unencoded data which represent Unicode code points 0x00..0xFF.  No translation of
-		the provided data will occur.
-
-	\param str_idx
-		Index of the first character from \a std_str to be inserted.
-
-	\param str_num
-		Maximum number of characters from \a str to be inserted.
-
-	\return
-		This String after the insert.
-
-	\exception std::out_of_range	Thrown if \a idx or \a str_idx are out of range.
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a idx or \a str_idx are out of range.
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String& insert(size_type idx, const std::string& std_str, size_type str_idx, size_type str_num)
 	{
 		if (d_cplength < idx)
@@ -1929,58 +950,15 @@ public:
 		return *this;
 	}
 
-	/*!
-	\brief
-		Inserts the given null-terminated utf8 encoded data at the specified position.
-
-	\param idx
-		Index where the data is to be inserted.
-
-	\param utf8_str
-		Buffer containing the null-terminated utf8 encoded data that is to be inserted.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\return
-		This String after the insert.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String&	insert(size_type idx, const utf8* utf8_str)
 	{
 		return insert(idx, utf8_str, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Inserts the given utf8 encoded data at the specified position.
-
-	\param idx
-		Index where the data is to be inserted.
-
-	\param utf8_str
-		Buffer containing the utf8 encoded data that is to be inserted.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param len
-		Length of the data to be inserted in uf8 code units (not code points)
-
-	\return
-		This String after the insert.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	\exception std::length_error	Thrown if resulting String would be too large, or if \a len is 'npos'
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
+	//exception std::length_error	Thrown if resulting String would be too large, or if \a len is 'npos'
 	String& insert(size_type idx, const utf8* utf8_str, size_type len)
 	{
 		if (d_cplength < idx)
@@ -2000,25 +978,8 @@ public:
 		return *this;
 	}
 
-	/*!
-	\brief
-		Inserts a code point multiple times into the String
-
-	\param idx
-		Index where the code point(s) are to be inserted
-
-	\param num
-		The number of times to insert the code point
-
-	\param code_point
-		The utf32 code point that is to be inserted
-
-	\return
-		This String after the insertion.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	\exception std::length_error	Thrown if resulting String would be too large, or if \a num is 'npos'
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
+	//exception std::length_error	Thrown if resulting String would be too large, or if \a num is 'npos'
 	String& insert(size_type idx, size_type num, utf32 code_point)
 	{
 		if (d_cplength < idx)
@@ -2042,115 +1003,34 @@ public:
 		return *this;
 	}
 
-	/*!
-	\brief
-		Inserts a code point multiple times into the String
-
-	\param pos
-		Iterator describing the position where the code point(s) are to be inserted
-
-	\param num
-		The number of times to insert the code point
-
-	\param code_point
-		The utf32 code point that is to be inserted
-
-	\return
-		This String after the insertion.
-
-	\exception std::length_error	Thrown if resulting String would be too large, or if \a num is 'npos'
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large, or if \a num is 'npos'
 	void insert(iterator pos, size_type num, utf32 code_point)
 	{
 		insert(safe_iter_dif(pos, begin()), num, code_point);
 	}
 
-	/*!
-	\brief
-		Inserts a single code point into the String
-
-	\param pos
-		Iterator describing the position where the code point is to be inserted
-
-	\param code_point
-		The utf32 code point that is to be inserted
-
-	\return
-		This String after the insertion.
-
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large.
 	iterator insert(iterator pos, utf32 code_point)
 	{
 		insert(pos, 1, code_point);
 		return pos;
 	}
 
-	/*!
-	\brief
-		Inserts code points specified by the range [beg, end).
-
-	\param pos
-		Iterator describing the position where the data is to be inserted
-
-	\param beg
-		Iterator describing the begining of the range to be inserted
-
-	\param end
-		Iterator describing the (exclusive) end of the range to be inserted.
-
-	\return
-		Nothing.
-
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if resulting String would be too large.
 	void	insert(iterator iter_pos, const_iterator iter_beg, const_iterator iter_end)
 	{
 		replace(iter_pos, iter_pos, iter_beg, iter_end);
 	}
 
-
-	/*!
-	\brief
-		Inserts the given c-string at the specified position.
-
-	\param idx
-		Index where the c-string is to be inserted.
-
-	\param c_str
-		c-string that is to be inserted.
-
-	\return
-		This String after the insert.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	\exception std::length_error	Thrown if resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
+	//exception std::length_error	Thrown if resulting String would be too large.
 	String&	insert(size_type idx, const char* cstr)
 	{
 		return insert(idx, cstr, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Inserts chars from the given char array at the specified position.
-
-	\param idx
-		Index where the data is to be inserted.
-
-	\param chars
-		char array containing the chars that are to be inserted.
-
-	\param chars_len
-		Length of the char array to be inserted.
-
-	\return
-		This String after the insert.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	\exception std::length_error	Thrown if resulting String would be too large, or if \a chars_len is 'npos'
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
+	//exception std::length_error	Thrown if resulting String would be too large, or if \a chars_len is 'npos'
 	String& insert(size_type idx, const char* chars, size_type chars_len)
 	{
 		if (d_cplength < idx)
@@ -2174,68 +1054,25 @@ public:
 		return *this;
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// Erasing characters
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Removes all data from the String
-
-	\return
-		Nothing
-	*/
 	void	clear(void)
 	{
 		setlen(0);
 		trim();
 	}
 
-	/*!
-	\brief
-		Removes all data from the String
-
-	\return
-		The empty String (*this)
-	*/
 	String& erase(void)
 	{
 		clear();
 		return *this;
 	}
 
-	/*!
-	\brief
-		Erase a single code point from the string
-
-	\param idx
-		The index of the code point to be removed.
-
-	\return
-		This String after the erase operation
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	String&	erase(size_type idx)
 	{
 		return erase(idx, 1);
 	}
 
-	/*!
-	\brief
-		Erase a range of code points
-
-	\param idx
-		Index of the first code point to be removed.
-
-	\param len
-		Maximum number of code points to be removed.
-
-	\return
-		This String after the erase operation.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	String& erase(size_type idx, size_type len)
 	{
         // cover the no-op case.
@@ -2250,79 +1087,29 @@ public:
 
 		size_type newsz = d_cplength - len;
 
+		//缓冲区并没有发生改变
 		memmove(&ptr()[idx], &ptr()[idx + len], (d_cplength - idx - len) * sizeof(utf32));
 		setlen(newsz);
 		return	*this;
 	}
 
-	/*!
-	\brief
-		Erase the code point described by the given iterator
-
-	\param pos
-		Iterator describing the code point to be erased
-
-	\return
-		This String after the erase operation.
-	*/
 	String& erase(iterator pos)
 	{
 		return erase(safe_iter_dif(pos, begin()), 1);
 	}
 
-	/*!
-	\brief
-		Erase a range of code points described by the iterators [beg, end).
-
-	\param beg
-		Iterator describing the postion of the beginning of the range to erase
-
-	\param end
-		Iterator describing the postion of the (exclusive) end of the range to erase
-
-	\return
-		This String after the erase operation.
-	*/
 	String& erase(iterator iter_beg, iterator iter_end)
 	{
 		return erase(safe_iter_dif(iter_beg, begin()), safe_iter_dif(iter_end, iter_beg));
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Resizing
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Resizes the String either by inserting default utf32 code points to make it larger, or by truncating to make it smaller
-
-	\param num
-		The length, in code points, that the String is to be made.
-
-	\return
-		Nothing.
-
-	\exception std::length_error	Thrown if the String would be too large.
-	*/
+	//exception std::length_error	Thrown if the String would be too large.
 	void	resize(size_type num)
 	{
 		resize(num, utf32());
 	}
 
-	/*!
-	\brief
-		Resizes the String either by inserting the given utf32 code point to make it larger, or by truncating to make it smaller
-
-	\param num
-		The length, in code points, that the String is to be made.
-
-	\param code_point
-		The utf32 code point that should be used when majing the String larger
-
-	\return
-		Nothing.
-
-	\exception std::length_error	Thrown if the String would be too large.
-	*/
+	//exception std::length_error	Thrown if the String would be too large.
 	void	resize(size_type num, utf32 code_point)
 	{
 		if (num < d_cplength)
@@ -2336,84 +1123,21 @@ public:
 
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Replacing Characters
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Replace code points in the String with the specified String object
-
-	\param idx
-		Index of the first code point to be replaced
-
-	\param len
-		Maximum number of code points to be replaced (if this is 0, operation is an insert at position \a idx)
-
-	\param str
-		The String object that is to replace the specified code points
-
-	\return
-		This String after the replace operation
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String
-	\exception std::length_error	Thrown if the resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String
+	//exception std::length_error	Thrown if the resulting String would be too large.
 	String& replace(size_type idx, size_type len, const String& str)
 	{
 		return replace(idx, len, str, 0, npos);
 	}
 
-	/*!
-	\brief
-		Replace the code points in the range [beg, end) with the specified String object
-
-	\note
-		If \a beg == \a end, the operation is a insert at iterator position \a beg
-
-	\param beg
-		Iterator describing the start of the range to be replaced
-
-	\param end
-		Iterator describing the (exclusive) end of the range to be replaced.
-
-	\param str
-		The String object that is to replace the specified range of code points
-
-	\return
-		This String after the replace operation
-
-	\exception std::length_error	Thrown if the resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if the resulting String would be too large.
 	String& replace(iterator iter_beg, iterator iter_end, const String& str)
 	{
 		return replace(safe_iter_dif(iter_beg, begin()), safe_iter_dif(iter_end, iter_beg), str, 0, npos);
 	}
 
-	/*!
-	\brief
-		Replace code points in the String with a specified sub-string of a given String object.
-
-	\param idx
-		Index of the first code point to be replaced
-
-	\param len
-		Maximum number of code points to be replaced.  If this is 0, the operation is an insert at position \a idx.
-
-	\param str
-		String object containing the data that will replace the specified range of code points
-
-	\param str_idx
-		Index of the first code point of \a str that is to replace the specified code point range
-
-	\param str_num
-		Maximum number of code points of \a str that are to replace the specified code point range
-
-	\return
-		This String after the replace operation
-
-	\exception std::out_of_range	Thrown if either \a idx, or \a str_idx are invalid
-	\exception std::length_error	Thrown if the resulting String would have been too large.
-	*/
+	//exception std::out_of_range	Thrown if either \a idx, or \a str_idx are invalid
+	//exception std::length_error	Thrown if the resulting String would have been too large.
 	String& replace(size_type idx, size_type len, const String& str, size_type str_idx, size_type str_num)
 	{
 		if ((d_cplength < idx) || (str.d_cplength < str_idx))
@@ -2438,94 +1162,21 @@ public:
 		return *this;
 	}
 
-
-	/*!
-	\brief
-		Replace code points in the String with the specified std::string object
-
-	\param idx
-		Index of the first code point to be replaced
-
-	\param len
-		Maximum number of code points to be replaced (if this is 0, operation is an insert at position \a idx)
-
-	\param std_str
-		The std::string object that is to replace the specified code points
-
-	\note
-		Characters from \a std_str are considered to represent Unicode code points in the range 0x00..0xFF.  No translation of
-		the encountered data is performed.
-
-	\return
-		This String after the replace operation
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String
-	\exception std::length_error	Thrown if the resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String
+	//exception std::length_error	Thrown if the resulting String would be too large.
 	String& replace(size_type idx, size_type len, const std::string& std_str)
 	{
 		return replace(idx, len, std_str, 0, npos);
 	}
 
-	/*!
-	\brief
-		Replace the code points in the range [beg, end) with the specified std::string object
-
-	\note
-		If \a beg == \a end, the operation is a insert at iterator position \a beg
-
-	\param beg
-		Iterator describing the start of the range to be replaced
-
-	\param end
-		Iterator describing the (exclusive) end of the range to be replaced.
-
-	\param std_str
-		The std::string object that is to replace the specified range of code points
-
-	\note
-		Characters from \a std_str are considered to represent Unicode code points in the range 0x00..0xFF.  No translation of
-		the encountered data is performed.
-
-	\return
-		This String after the replace operation
-
-	\exception std::length_error	Thrown if the resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if the resulting String would be too large.
 	String& replace(iterator iter_beg, iterator iter_end, const std::string& std_str)
 	{
 		return replace(safe_iter_dif(iter_beg, begin()), safe_iter_dif(iter_end, iter_beg), std_str, 0, npos);
 	}
 
-	/*!
-	\brief
-		Replace code points in the String with a specified sub-string of a given std::string object.
-
-	\param idx
-		Index of the first code point to be replaced
-
-	\param len
-		Maximum number of code points to be replaced.  If this is 0, the operation is an insert at position \a idx.
-
-	\param std_str
-		std::string object containing the data that will replace the specified range of code points
-
-	\note
-		Characters from \a std_str are considered to represent Unicode code points in the range 0x00..0xFF.  No translation of
-		the encountered data is performed.
-
-	\param str_idx
-		Index of the first code point of \a std_str that is to replace the specified code point range
-
-	\param str_num
-		Maximum number of code points of \a std_str that are to replace the specified code point range
-
-	\return
-		This String after the replace operation
-
-	\exception std::out_of_range	Thrown if either \a idx, or \a str_idx are invalid
-	\exception std::length_error	Thrown if the resulting String would have been too large.
-	*/
+	//exception std::out_of_range	Thrown if either \a idx, or \a str_idx are invalid
+	//exception std::length_error	Thrown if the resulting String would have been too large.
 	String& replace(size_type idx, size_type len, const std::string& std_str, size_type str_idx, size_type str_num)
 	{
 		if (d_cplength < idx)
@@ -2557,97 +1208,21 @@ public:
 		return *this;
 	}
 
-
-	/*!
-	\brief
-		Replace code points in the String with the specified null-terminated utf8 encoded data.
-
-	\param idx
-		Index of the first code point to be replaced
-
-	\param len
-		Maximum number of code points to be replaced (if this is 0, operation is an insert at position \a idx)
-
-	\param utf8_str
-		Buffer containing the null-terminated utf8 encoded data that is to replace the specified code points
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\return
-		This String after the replace operation
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String
-	\exception std::length_error	Thrown if the resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String
+	//exception std::length_error	Thrown if the resulting String would be too large.
 	String& replace(size_type idx, size_type len, const utf8* utf8_str)
 	{
 		return replace(idx, len, utf8_str, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Replace the code points in the range [beg, end) with the specified null-terminated utf8 encoded data.
-
-	\note
-		If \a beg == \a end, the operation is a insert at iterator position \a beg
-
-	\param beg
-		Iterator describing the start of the range to be replaced
-
-	\param end
-		Iterator describing the (exclusive) end of the range to be replaced.
-
-	\param utf8_str
-		Buffer containing the null-terminated utf8 encoded data that is to replace the specified range of code points
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\return
-		This String after the replace operation
-
-	\exception std::length_error	Thrown if the resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if the resulting String would be too large.
 	String& replace(iterator iter_beg, iterator iter_end, const utf8* utf8_str)
 	{
 		return replace(iter_beg, iter_end, utf8_str, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Replace code points in the String with the specified utf8 encoded data.
-
-	\param idx
-		Index of the first code point to be replaced
-
-	\param len
-		Maximum number of code points to be replaced (if this is 0, operation is an insert at position \a idx)
-
-	\param utf8_str
-		Buffer containing the null-terminated utf8 encoded data that is to replace the specified code points
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param str_len
-		Length of the utf8 encoded data in utf8 code units (not code points).
-
-	\return
-		This String after the replace operation
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String
-	\exception std::length_error	Thrown if the resulting String would be too large, or if \a str_len was 'npos'.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String
+	//exception std::length_error	Thrown if the resulting String would be too large, or if \a str_len was 'npos'.
 	String& replace(size_type idx, size_type len, const utf8* utf8_str, size_type str_len)
 	{
 		if (d_cplength < idx)
@@ -2673,63 +1248,14 @@ public:
 		return *this;
 	}
 
-	/*!
-	\brief
-		Replace the code points in the range [beg, end) with the specified null-terminated utf8 encoded data.
-
-	\note
-		If \a beg == \a end, the operation is a insert at iterator position \a beg
-
-	\param beg
-		Iterator describing the start of the range to be replaced
-
-	\param end
-		Iterator describing the (exclusive) end of the range to be replaced.
-
-	\param utf8_str
-		Buffer containing the null-terminated utf8 encoded data that is to replace the specified range of code points
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param str_len
-		Length of the utf8 encoded data in utf8 code units (not code points).
-
-	\return
-		This String after the replace operation
-
-		\exception std::length_error	Thrown if the resulting String would be too large, or if \a str_len was 'npos'.
-	*/
+	//exception std::length_error	Thrown if the resulting String would be too large, or if \a str_len was 'npos'.
 	String& replace(iterator iter_beg, iterator iter_end, const utf8* utf8_str, size_type str_len)
 	{
 		return replace(safe_iter_dif(iter_beg, begin()), safe_iter_dif(iter_end, iter_beg), utf8_str, str_len);
 	}
 
-	/*!
-	\brief
-		Replaces a specified range of code points with occurrences of a given code point
-
-	\param idx
-		Index of the first code point to be replaced
-
-	\param len
-		Maximum number of code points to replace.  If this is 0 the operation is an insert
-
-	\param num
-		Number of occurrences of \a code_point that are to replace the specified range of code points
-
-	\param code_point
-		Code point that is to be used when replacing the specified range of code points
-
-	\return
-		This String after the replace operation.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String
-	\exception std::length_error	Thrown if resulting String would have been too long, or if \a num was 'npos'.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String
+	//exception std::length_error	Thrown if resulting String would have been too long, or if \a num was 'npos'.
 	String& replace(size_type idx, size_type len, size_type num, utf32 code_point)
 	{
 		if (d_cplength < idx)
@@ -2758,63 +1284,17 @@ public:
 		return *this;
 	}
 
-	/*!
-	\brief
-		Replace the code points in the range [beg, end) with occurrences of a given code point
-
-	\note
-		If \a beg == \a end, the operation is an insert at iterator position \a beg
-
-	\param beg
-		Iterator describing the start of the range to be replaced
-
-	\param end
-		Iterator describing the (exclusive) end of the range to be replaced.
-
-	\param num
-		Number of occurrences of \a code_point that are to replace the specified range of code points
-
-	\param code_point
-		Code point that is to be used when replacing the specified range of code points
-
-	\return
-		This String after the replace operation
-
-	\exception std::length_error	Thrown if resulting String would have been too long, or if \a num was 'npos'.
-	*/
+	//exception std::length_error	Thrown if resulting String would have been too long, or if \a num was 'npos'.
 	String& replace(iterator iter_beg, iterator iter_end, size_type num, utf32 code_point)
 	{
 		return replace(safe_iter_dif(iter_beg, begin()), safe_iter_dif(iter_end, iter_beg), num, code_point);
 	}
 
-
-	/*!
-	\brief
-		Replace the code points in the range [beg, end) with code points from the range [newBeg, newEnd).
-
-	\note
-		If \a beg == \a end, the operation is an insert at iterator position \a beg
-
-	\param beg
-		Iterator describing the start of the range to be replaced
-
-	\param end
-		Iterator describing the (exclusive) end of the range to be replaced.
-
-	\param newBeg
-		Iterator describing the beginning of the range to insert.
-
-	\param newEnd
-		Iterator describing the (exclusive) end of the range to insert.
-
-	\return
-		This String after the insert operation.
-
-	\exception std::length_error	Thrown if the resulting string would be too long.
-	*/
+	//用newBeg和newEnd之间的数据代替beg和end之间的数据
+	//exception std::length_error	Thrown if the resulting string would be too long.
 	String& replace(iterator iter_beg, iterator iter_end, const_iterator iter_newBeg, const_iterator iter_newEnd)
 	{
-		if (iter_newBeg == iter_newEnd)
+		if (iter_newBeg == iter_newEnd) //如新信息为空，则删除原信息
 		{
 			erase(safe_iter_dif(iter_beg, begin()), safe_iter_dif(iter_end, iter_beg));
 		}
@@ -2831,6 +1311,7 @@ public:
 
 			grow(newsz);
 
+			//将idx+len之后的数据往后移
 			if ((idx + len) < d_cplength)
 				memmove(&ptr()[idx + str_len], &ptr()[len + idx], (d_cplength - idx - len) * sizeof(utf32));
 
@@ -2841,81 +1322,21 @@ public:
 		return *this;
 	}
 
-
-	/*!
-	\brief
-		Replace code points in the String with the specified c-string.
-
-	\param idx
-		Index of the first code point to be replaced
-
-	\param len
-		Maximum number of code points to be replaced (if this is 0, operation is an insert at position \a idx)
-
-	\param c_str
-		c-string that is to replace the specified code points
-
-	\return
-		This String after the replace operation
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String
-	\exception std::length_error	Thrown if the resulting String would be too large.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String
+	//exception std::length_error	Thrown if the resulting String would be too large.
 	String& replace(size_type idx, size_type len, const char* cstr)
 	{
 		return replace(idx, len, cstr, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Replace the code points in the range [beg, end) with the specified c-string.
-
-	\note
-		If \a beg == \a end, the operation is a insert at iterator position \a beg
-
-	\param beg
-		Iterator describing the start of the range to be replaced
-
-	\param end
-		Iterator describing the (exclusive) end of the range to be replaced.
-
-	\param c_str
-		c-string that is to replace the specified range of code points
-
-	\return
-		This String after the replace operation
-
-	\exception std::length_error	Thrown if the resulting String would be too large.
-	*/
+	//exception std::length_error	Thrown if the resulting String would be too large.
 	String& replace(iterator iter_beg, iterator iter_end, const char* cstr)
 	{
 		return replace(iter_beg, iter_end, cstr, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Replace code points in the String with chars from the given char array.
-
-	\param idx
-		Index of the first code point to be replaced
-
-	\param len
-		Maximum number of code points to be replaced (if this is 0, operation is an insert at position \a idx)
-
-	\param chars
-		char array containing the cars that are to replace the specified code points
-
-	\param chars_len
-		Number of chars in the char array.
-
-	\return
-		This String after the replace operation
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String
-	\exception std::length_error	Thrown if the resulting String would be too large, or if \a chars_len was 'npos'.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String
+	//exception std::length_error	Thrown if the resulting String would be too large, or if \a chars_len was 'npos'.
 	String& replace(size_type idx, size_type len, const char* chars, size_type chars_len)
 	{
 		if (d_cplength < idx)
@@ -2943,54 +1364,12 @@ public:
 		return *this;
 	}
 
-
-	/*!
-	\brief
-		Replace the code points in the range [beg, end) with chars from the given char array.
-
-	\note
-		If \a beg == \a end, the operation is a insert at iterator position \a beg
-
-	\param beg
-		Iterator describing the start of the range to be replaced
-
-	\param end
-		Iterator describing the (exclusive) end of the range to be replaced.
-
-	\param chars
-		char array containing the chars that are to replace the specified range of code points
-
-	\param chars_len
-		Number of chars in the char array.
-
-	\return
-		This String after the replace operation
-
-	\exception std::length_error	Thrown if the resulting String would be too large, or if \a chars_len was 'npos'.
-	*/
+	//exception std::length_error	Thrown if the resulting String would be too large, or if \a chars_len was 'npos'.
 	String& replace(iterator iter_beg, iterator iter_end, const char* chars, size_type chars_len)
 	{
 		return replace(safe_iter_dif(iter_beg, begin()), safe_iter_dif(iter_end, iter_beg), chars, chars_len);
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// Find a code point
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Search forwards for a given code point
-
-	\param code_point
-		The utf32 code point to search for
-
-	\param idx
-		Index of the code point where the search is to start.
-
-	\return
-		- Index of the first occurrence of \a code_point travelling forwards from \a idx.
-		- npos if the code point could not be found
-	*/
 	size_type	find(utf32 code_point, size_type idx = 0) const
 	{
 		if (idx < d_cplength)
@@ -3010,20 +1389,6 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Search backwards for a given code point
-
-	\param code_point
-		The utf32 code point to search for
-
-	\param idx
-		Index of the code point where the search is to start.
-
-	\return
-		- Index of the first occurrence of \a code_point travelling backwards from \a idx.
-		- npos if the code point could not be found
-	*/
 	size_type	rfind(utf32 code_point, size_type idx = npos) const
 	{
 		if (idx >= d_cplength)
@@ -3045,23 +1410,6 @@ public:
 		return npos;
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Find a substring
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Search forwards for a sub-string
-
-	\param str
-		String object describing the sub-string to search for
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\return
-		- Index of the first occurrence of sub-string \a str travelling forwards from \a idx.
-		- npos if the sub-string could not be found
-	*/
 	size_type	find(const String& str, size_type idx = 0) const
 	{
 		if ((str.d_cplength == 0) && (idx < d_cplength))
@@ -3083,20 +1431,6 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Search backwards for a sub-string
-
-	\param str
-		String object describing the sub-string to search for
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\return
-		- Index of the first occurrence of sub-string \a str travelling backwards from \a idx.
-		- npos if the sub-string could not be found
-	*/
 	size_type	rfind(const String& str, size_type idx = npos) const
 	{
 		if (str.d_cplength == 0)
@@ -3119,24 +1453,6 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Search forwards for a sub-string
-
-	\param std_str
-		std::string object describing the sub-string to search for
-
-	\note
-		Characters from \a std_str are considered to represent Unicode code points in the range 0x00..0xFF.  No translation of
-		the encountered data is performed.
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\return
-		- Index of the first occurrence of sub-string \a std_str travelling forwards from \a idx.
-		- npos if the sub-string could not be found
-	*/
 	size_type	find(const std::string& std_str, size_type idx = 0) const
 	{
 		std::string::size_type sze = std_str.size();
@@ -3160,24 +1476,6 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Search backwards for a sub-string
-
-	\param std_str
-		std::string object describing the sub-string to search for
-
-	\note
-		Characters from \a std_str are considered to represent Unicode code points in the range 0x00..0xFF.  No translation of
-		the encountered data is performed.
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\return
-		- Index of the first occurrence of sub-string \a std_str travelling backwards from \a idx.
-		- npos if the sub-string could not be found
-	*/
 	size_type	rfind(const std::string& std_str, size_type idx = npos) const
 	{
 		std::string::size_type sze = std_str.size();
@@ -3202,85 +1500,19 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Search forwards for a sub-string
-
-	\param utf8_str
-		Buffer containing null-terminated utf8 encoded data describing the sub-string to search for
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\return
-		- Index of the first occurrence of sub-string \a utf8_str travelling forwards from \a idx.
-		- npos if the sub-string could not be found
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find(const utf8* utf8_str, size_type idx = 0) const
 	{
 		return find(utf8_str, idx, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Search backwards for a sub-string
-
-	\param utf8_str
-		Buffer containing null-terminated utf8 encoded data describing the sub-string to search for
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\return
-		- Index of the first occurrence of sub-string \a utf8_str travelling backwards from \a idx.
-		- npos if the sub-string could not be found
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	rfind(const utf8* utf8_str, size_type idx = npos) const
 	{
 		return rfind(utf8_str, idx, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Search forwards for a sub-string
-
-	\param utf8_str
-		Buffer containing utf8 encoded data describing the sub-string to search for
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\param str_len
-		Length of the utf8 encoded sub-string in utf8 code units (not code points)
-
-	\return
-		- Index of the first occurrence of sub-string \a utf8_str travelling forwards from \a idx.
-		- npos if the sub-string could not be found
-
-	\exception std::length_error	Thrown if \a str_len is 'npos'
-	*/
+	//exception std::length_error	Thrown if \a str_len is 'npos'
 	size_type	find(const utf8* utf8_str, size_type idx, size_type str_len) const
 	{
 		if (str_len == npos)
@@ -3307,31 +1539,7 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Search backwards for a sub-string
-
-	\param utf8_str
-		Buffer containing utf8 encoded data describing the sub-string to search for
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\param str_len
-		Length of the utf8 encoded sub-string in utf8 code units (not code points)
-
-	\return
-		- Index of the first occurrence of sub-string \a utf8_str travelling backwards from \a idx.
-		- npos if the sub-string could not be found
-
-	\exception std::length_error	Thrown if \a str_len is 'npos'
-	*/
+	//exception std::length_error	Thrown if \a str_len is 'npos'
 	size_type	rfind(const utf8* utf8_str, size_type idx, size_type str_len) const
 	{
 		if (str_len == npos)
@@ -3359,70 +1567,19 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Search forwards for a sub-string
-
-	\param c_str
-		c-string describing the sub-string to search for
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\return
-		- Index of the first occurrence of sub-string \a c_str travelling forwards from \a idx.
-		- npos if the sub-string could not be found
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find(const char* cstr, size_type idx = 0) const
 	{
 		return find(cstr, idx, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Search backwards for a sub-string
-
-	\param c_str
-		c-string describing the sub-string to search for
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\return
-		- Index of the first occurrence of sub-string \a c_str travelling backwards from \a idx.
-		- npos if the sub-string could not be found
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	rfind(const char* cstr, size_type idx = npos) const
 	{
 		return rfind(cstr, idx, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Search forwards for a sub-string
-
-	\param chars
-		char array describing the sub-string to search for
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\param chars_len
-		Number of chars in the char array.
-
-	\return
-		- Index of the first occurrence of sub-string \a chars travelling forwards from \a idx.
-		- npos if the sub-string could not be found
-
-	\exception std::length_error	Thrown if \a chars_len is 'npos'
-	*/
+	//exception std::length_error	Thrown if \a chars_len is 'npos'
 	size_type	find(const char* chars, size_type idx, size_type chars_len) const
 	{
 		if (chars_len == npos)
@@ -3447,26 +1604,7 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Search backwards for a sub-string
-
-	\param chars
-		char array describing the sub-string to search for
-
-	\param idx
-		Index of the code point where the search is to start
-
-	\param chars_len
-		Number of chars in the char array.
-
-	\return
-		- Index of the first occurrence of sub-string \a chars travelling backwards from \a idx.
-		- npos if the sub-string could not be found
-
-	\exception std::length_error	Thrown if \a chars_len is 'npos'
-	*/
+	//exception std::length_error	Thrown if \a chars_len is 'npos'
 	size_type	rfind(const char* chars, size_type idx, size_type chars_len) const
 	{
 		if (chars_len == npos)
@@ -3492,24 +1630,6 @@ public:
 		return npos;
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// Find first of different code-points
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Find the first occurrence of one of a set of code points.
-
-	\param str
-		String object describing the set of code points.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the first occurrence of any one of the code points in \a str starting from from \a idx.
-		- npos if none of the code points in \a str were found.
-	*/
 	size_type	find_first_of(const String& str, size_type idx = 0) const
 	{
 		if (idx < d_cplength)
@@ -3528,20 +1648,6 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Find the first code point that is not one of a set of code points.
-
-	\param str
-		String object describing the set of code points.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the first code point that does not match any one of the code points in \a str starting from from \a idx.
-		- npos if all code points matched one of the code points in \a str.
-	*/
 	size_type	find_first_not_of(const String& str, size_type idx = 0) const
 	{
 		if (idx < d_cplength)
@@ -3560,25 +1666,6 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Find the first occurrence of one of a set of code points.
-
-	\param std_str
-		std::string object describing the set of code points.
-
-	\note
-		The characters of \a std_str are taken to be unencoded data which represent Unicode code points 0x00..0xFF.  No translation of
-		the provided data will occur.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the first occurrence of any one of the code points in \a std_str starting from from \a idx.
-		- npos if none of the code points in \a std_str were found.
-	*/
 	size_type	find_first_of(const std::string& std_str, size_type idx = 0) const
 	{
 		if (idx < d_cplength)
@@ -3597,24 +1684,6 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Find the first code point that is not one of a set of code points.
-
-	\param std_str
-		std::string object describing the set of code points.
-
-	\note
-		The characters of \a std_str are taken to be unencoded data which represent Unicode code points 0x00..0xFF.  No translation of
-		the provided data will occur.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the first code point that does not match any one of the code points in \a std_str starting from from \a idx.
-		- npos if all code points matched one of the code points in \a std_str.
-	*/
 	size_type	find_first_not_of(const std::string& std_str, size_type idx = 0) const
 	{
 		if (idx < d_cplength)
@@ -3633,86 +1702,19 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Find the first occurrence of one of a set of code points.
-
-	\param utf8_str
-		Buffer containing null-terminated utf8 encoded data describing the set of code points.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the first occurrence of any one of the code points in \a utf8_str starting from from \a idx.
-		- npos if none of the code points in \a utf8_str were found.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find_first_of(const utf8* utf8_str, size_type idx = 0) const
 	{
 		return find_first_of(utf8_str, idx, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Find the first code point that is not one of a set of code points.
-
-	\param utf8_str
-		Buffer containing null-terminated utf8 encoded data describing the set of code points.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the first code point that does not match any one of the code points in \a utf8_str starting from from \a idx.
-		- npos if all code points matched one of the code points in \a utf8_str.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find_first_not_of(const utf8* utf8_str, size_type idx = 0) const
 	{
 		return find_first_not_of(utf8_str, idx, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Find the first occurrence of one of a set of code points.
-
-	\param utf8_str
-		Buffer containing utf8 encoded data describing the set of code points.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the start point for the search
-
-	\param str_len
-		Length of the utf8 encoded data in utf8 code units (not code points).
-
-	\return
-		- Index of the first occurrence of any one of the code points in \a utf8_str starting from from \a idx.
-		- npos if none of the code points in \a utf8_str were found.
-
-	\exception std::length_error	Thrown if \a str_len was 'npos'.
-	*/
+	//exception std::length_error	Thrown if \a str_len was 'npos'.
 	size_type	find_first_of(const utf8* utf8_str, size_type idx, size_type str_len) const
 	{
 		if (str_len == npos)
@@ -3736,31 +1738,7 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Find the first code point that is not one of a set of code points.
-
-	\param utf8_str
-		Buffer containing utf8 encoded data describing the set of code points.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the start point for the search
-
-	\param str_len
-		Length of the utf8 encoded data in utf8 code units (not code points).
-
-	\return
-		- Index of the first code point that does not match any one of the code points in \a utf8_str starting from from \a idx.
-		- npos if all code points matched one of the code points in \a utf8_str.
-
-	\exception std::length_error	Thrown if \a str_len was 'npos'.
-	*/
+	//exception std::length_error	Thrown if \a str_len was 'npos'.
 	size_type	find_first_not_of(const utf8* utf8_str, size_type idx, size_type str_len) const
 	{
 		if (str_len == npos)
@@ -3784,42 +1762,12 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Search forwards for a given code point
-
-	\param code_point
-		The utf32 code point to search for
-
-	\param idx
-		Index of the code point where the search is to start.
-
-	\return
-		- Index of the first occurrence of \a code_point starting from from \a idx.
-		- npos if the code point could not be found
-	*/
 	size_type	find_first_of(utf32 code_point, size_type idx = 0) const
 	{
 		return find(code_point, idx);
 	}
 
-	/*!
-	\brief
-		Search forwards for the first code point that does not match a given code point
-
-	\param code_point
-		The utf32 code point to search for
-
-	\param idx
-		Index of the code point where the search is to start.
-
-	\return
-		- Index of the first code point that does not match \a code_point starting from from \a idx.
-		- npos if all code points matched \a code_point
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find_first_not_of(utf32 code_point, size_type idx = 0) const
 	{
 		if (idx < d_cplength)
@@ -3836,70 +1784,19 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Find the first occurrence of one of a set of chars.
-
-	\param c_str
-		c-string describing the set of chars.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the first occurrence of any one of the chars in \a c_str starting from from \a idx.
-		- npos if none of the chars in \a c_str were found.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find_first_of(const char* cstr, size_type idx = 0) const
 	{
 		return find_first_of(cstr, idx, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Find the first code point that is not one of a set of chars.
-
-	\param c_str
-		c-string describing the set of chars.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the first code point that does not match any one of the chars in \a c_str starting from from \a idx.
-		- npos if all code points matched any of the chars in \a c_str.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find_first_not_of(const char* cstr, size_type idx = 0) const
 	{
 		return find_first_not_of(cstr, idx, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Find the first occurrence of one of a set of chars.
-
-	\param chars
-		char array containing the set of chars.
-
-	\param idx
-		Index of the start point for the search
-
-	\param chars_len
-		Number of chars in the char array.
-
-	\return
-		- Index of the first occurrence of any one of the chars in \a chars starting from from \a idx.
-		- npos if none of the chars in \a chars were found.
-
-	\exception std::length_error	Thrown if \a chars_len was 'npos'.
-	*/
+	//exception std::length_error	Thrown if \a chars_len was 'npos'.
 	size_type	find_first_of(const char* chars, size_type idx, size_type chars_len) const
 	{
 		if (chars_len == npos)
@@ -3921,26 +1818,7 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Find the first code point that is not one of a set of chars.
-
-	\param chars
-		char array containing the set of chars.
-
-	\param idx
-		Index of the start point for the search
-
-	\param chars_len
-		Number of chars in the car array.
-
-	\return
-		- Index of the first code point that does not match any one of the chars in \a chars starting from from \a idx.
-		- npos if all code points matched any of the chars in \a chars.
-
-	\exception std::length_error	Thrown if \a chars_len was 'npos'.
-	*/
+	//exception std::length_error	Thrown if \a chars_len was 'npos'.
 	size_type	find_first_not_of(const char* chars, size_type idx, size_type chars_len) const
 	{
 		if (chars_len == npos)
@@ -3962,24 +1840,6 @@ public:
 		return npos;
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// Find last of different code-points
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Find the last occurrence of one of a set of code points.
-
-	\param str
-		String object describing the set of code points.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the last occurrence of any one of the code points in \a str starting from \a idx.
-		- npos if none of the code points in \a str were found.
-	*/
 	size_type	find_last_of(const String& str, size_type idx = npos) const
 	{
 		if (d_cplength > 0)
@@ -4001,20 +1861,6 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Find the last code point that is not one of a set of code points.
-
-	\param str
-		String object describing the set of code points.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the last code point that does not match any one of the code points in \a str starting from \a idx.
-		- npos if all code points matched one of the code points in \a str.
-	*/
 	size_type	find_last_not_of(const String& str, size_type idx = npos) const
 	{
 		if (d_cplength > 0)
@@ -4036,25 +1882,6 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Find the last occurrence of one of a set of code points.
-
-	\param std_str
-		std::string object describing the set of code points.
-
-	\note
-		The characters of \a std_str are taken to be unencoded data which represent Unicode code points 0x00..0xFF.  No translation of
-		the provided data will occur.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the last occurrence of any one of the code points in \a std_str starting from \a idx.
-		- npos if none of the code points in \a std_str were found.
-	*/
 	size_type	find_last_of(const std::string& std_str, size_type idx = npos) const
 	{
 		if (d_cplength > 0)
@@ -4076,24 +1903,6 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Find the last code point that is not one of a set of code points.
-
-	\param std_str
-		std::string object describing the set of code points.
-
-	\note
-		The characters of \a std_str are taken to be unencoded data which represent Unicode code points 0x00..0xFF.  No translation of
-		the provided data will occur.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the last code point that does not match any one of the code points in \a std_str starting from \a idx.
-		- npos if all code points matched one of the code points in \a std_str.
-	*/
 	size_type	find_last_not_of(const std::string& std_str, size_type idx = npos) const
 	{
 		if (d_cplength > 0)
@@ -4115,86 +1924,19 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Find the last occurrence of one of a set of code points.
-
-	\param utf8_str
-		Buffer containing null-terminated utf8 encoded data describing the set of code points.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the last occurrence of any one of the code points in \a utf8_str starting from \a idx.
-		- npos if none of the code points in \a utf8_str were found.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find_last_of(const utf8* utf8_str, size_type idx = npos) const
 	{
 		return find_last_of(utf8_str, idx, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Find the last code point that is not one of a set of code points.
-
-	\param utf8_str
-		Buffer containing null-terminated utf8 encoded data describing the set of code points.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the last code point that does not match any one of the code points in \a utf8_str starting from \a idx.
-		- npos if all code points matched one of the code points in \a utf8_str.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find_last_not_of(const utf8* utf8_str, size_type idx = npos) const
 	{
 		return find_last_not_of(utf8_str, idx, utf_length(utf8_str));
 	}
 
-	/*!
-	\brief
-		Find the last occurrence of one of a set of code points.
-
-	\param utf8_str
-		Buffer containing utf8 encoded data describing the set of code points.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the start point for the search
-
-	\param str_len
-		Length of the utf8 encoded data in utf8 code units (not code points).
-
-	\return
-		- Index of the last occurrence of any one of the code points in \a utf8_str starting from from \a idx.
-		- npos if none of the code points in \a utf8_str were found.
-
-	\exception std::length_error	Thrown if \a str_len was 'npos'.
-	*/
+	//exception std::length_error	Thrown if \a str_len was 'npos'.
 	size_type	find_last_of(const utf8* utf8_str, size_type idx, size_type str_len) const
 	{
 		if (str_len == npos)
@@ -4221,31 +1963,7 @@ public:
 		return npos;
 	}
 
-	/*!
-	\brief
-		Find the last code point that is not one of a set of code points.
-
-	\param utf8_str
-		Buffer containing utf8 encoded data describing the set of code points.
-
-	\note
-		A basic string literal (cast to utf8*) can be passed to this function, provided that the string is
-		comprised only of code points 0x00..0x7f.  The use of extended ASCII characters (with values >0x7f)
-		would result in incorrect behaviour as the String will attempt to 'decode' the data, with unpredictable
-		results.
-
-	\param idx
-		Index of the start point for the search
-
-	\param str_len
-		Length of the utf8 encoded data in utf8 code units (not code points).
-
-	\return
-		- Index of the last code point that does not match any one of the code points in \a utf8_str starting from from \a idx.
-		- npos if all code points matched one of the code points in \a utf8_str.
-
-	\exception std::length_error	Thrown if \a str_len was 'npos'.
-	*/
+	//exception std::length_error	Thrown if \a str_len was 'npos'.
 	size_type	find_last_not_of(const utf8* utf8_str, size_type idx, size_type str_len) const
 	{
 		if (str_len == npos)
@@ -4272,40 +1990,11 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Search for last occurrence of a given code point
-
-	\param code_point
-		The utf32 code point to search for
-
-	\param idx
-		Index of the code point where the search is to start.
-
-	\return
-		- Index of the last occurrence of \a code_point starting from \a idx.
-		- npos if the code point could not be found
-	*/
 	size_type	find_last_of(utf32 code_point, size_type idx = npos) const
 	{
 		return rfind(code_point, idx);
 	}
 
-	/*!
-	\brief
-		Search for the last code point that does not match a given code point
-
-	\param code_point
-		The utf32 code point to search for
-
-	\param idx
-		Index of the code point where the search is to start.
-
-	\return
-		- Index of the last code point that does not match \a code_point starting from from \a idx.
-		- npos if all code points matched \a code_point
-	*/
 	size_type	find_last_not_of(utf32 code_point, size_type idx = npos) const
 	{
 		if (d_cplength > 0)
@@ -4325,70 +2014,19 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Find the last occurrence of one of a set of chars.
-
-	\param c_str
-		c-string describing the set of chars.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the last occurrence of any one of the chars in \a c_str starting from \a idx.
-		- npos if none of the chars in \a c_str were found.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find_last_of(const char* cstr, size_type idx = npos) const
 	{
 		return find_last_of(cstr, idx, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Find the last code point that is not one of a set of chars.
-
-	\param c_str
-		c-string describing the set of chars.
-
-	\param idx
-		Index of the start point for the search
-
-	\return
-		- Index of the last code point that does not match any one of the chars in \a c_str starting from \a idx.
-		- npos if all code points matched any of the chars in \a c_str.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	size_type	find_last_not_of(const char* cstr, size_type idx = npos) const
 	{
 		return find_last_not_of(cstr, idx, strlen(cstr));
 	}
 
-
-	/*!
-	\brief
-		Find the last occurrence of one of a set of chars.
-
-	\param chars
-		char array containing the set of chars.
-
-	\param idx
-		Index of the start point for the search
-
-	\param chars_len
-		Number of chars in the char array.
-
-	\return
-		- Index of the last occurrence of any one of the chars in \a chars, starting from from \a idx.
-		- npos if none of the chars in \a chars were found.
-
-	\exception std::length_error	Thrown if \a chars_len was 'npos'.
-	*/
+	//exception std::length_error	Thrown if \a chars_len was 'npos'.
 	size_type	find_last_of(const char* chars, size_type idx, size_type chars_len) const
 	{
 		if (chars_len == npos)
@@ -4413,26 +2051,7 @@ public:
 		return npos;
 	}
 
-
-	/*!
-	\brief
-		Find the last code point that is not one of a set of chars.
-
-	\param chars
-		char array containing the set of chars.
-
-	\param idx
-		Index of the start point for the search
-
-	\param chars_len
-		Number of chars in the char array.
-
-	\return
-		- Index of the last code point that does not match any one of the chars in \a chars, starting from from \a idx.
-		- npos if all code points matched any of the chars in \a chars.
-
-	\exception std::length_error	Thrown if \a chars_len was 'npos'.
-	*/
+	//exception std::length_error	Thrown if \a chars_len was 'npos'.
 	size_type	find_last_not_of(const char* chars, size_type idx, size_type chars_len) const
 	{
 		if (chars_len == npos)
@@ -4457,25 +2076,7 @@ public:
 		return npos;
 	}
 
-
-	//////////////////////////////////////////////////////////////////////////
-	// Substring
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Returns a substring of this String.
-
-	\param idx
-		Index of the first code point to use for the sub-string.
-
-	\param len
-		Maximum number of code points to use for the sub-string
-
-	\return
-		A String object containing the specified sub-string.
-
-	\exception std::out_of_range	Thrown if \a idx is invalid for this String.
-	*/
+	//exception std::out_of_range	Thrown if \a idx is invalid for this String.
 	String	substr(size_type idx = 0, size_type len = npos) const
 	{
 		if (d_cplength < idx)
@@ -4484,127 +2085,56 @@ public:
 		return String(*this, idx, len);
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Iterator creation
-	//////////////////////////////////////////////////////////////////////////
-	/*!
-	\brief
-		Return a forwards iterator that describes the beginning of the String
-
-	\return
-		iterator object that describes the beginning of the String.
-	*/
+	//返回迭代器，指向缓冲区开始的位置
 	iterator		begin(void)
 	{
 		return iterator(ptr());
 	}
 
-	/*!
-	\brief
-		Return a constant forwards iterator that describes the beginning of the String
-
-	\return
-		const_iterator object that describes the beginning of the String.
-	*/
 	const_iterator	begin(void) const
 	{
 		return const_iterator(ptr());
 	}
 
-	/*!
-	\brief
-		Return a forwards iterator that describes the end of the String
-
-	\return
-		iterator object that describes the end of the String.
-	*/
+	//d_cplength代表字符长度，不包括结尾0
 	iterator		end(void)
 	{
 		return iterator(&ptr()[d_cplength]);
 	}
 
-	/*!
-	\brief
-		Return a constant forwards iterator that describes the end of the String
-
-	\return
-		const_iterator object that describes the end of the String.
-	*/
 	const_iterator	end(void) const
 	{
 		return const_iterator(&ptr()[d_cplength]);
 	}
 
-	/*!
-	\brief
-		Return a reverse iterator that describes the beginning of the String
-
-	\return
-		reverse_iterator object that describes the beginning of the String (so is actually at the end)
-	*/
 	reverse_iterator		rbegin(void)
 	{
 		return reverse_iterator(end());
 	}
 
-	/*!
-	\brief
-		Return a constant reverse iterator that describes the beginning of the String
-
-	\return
-		const_reverse_iterator object that describes the beginning of the String (so is actually at the end)
-	*/
 	const_reverse_iterator	rbegin(void) const
 	{
 		return const_reverse_iterator(end());
 	}
 
-	/*!
-	\brief
-		Return a reverse iterator that describes the end of the String
-
-	\return
-		reverse_iterator object that describes the end of the String (so is actually at the beginning)
-	*/
 	reverse_iterator		rend(void)
 	{
 		return reverse_iterator(begin());
 	}
 
-	/*!
-	\brief
-		Return a constant reverse iterator that describes the end of the String
-
-	\return
-		const_reverse_iterator object that describes the end of the String (so is actually at the beginning)
-	*/
 	const_reverse_iterator	rend(void) const
 	{
 		return const_reverse_iterator(begin());
 	}
 
 private:
-	/*************************************************************************
-		Implementation Functions
-	*************************************************************************/
-	// string management
-
-	// change size of allocated buffer so it is at least 'new_size'.
-	// May or may not cause re-allocation and copy of buffer if size is larger
-	// will never re-allocate to make size smaller.  (see trim())
     bool	grow(size_type new_size);
-
-	// perform re-allocation to remove wasted space.
     void	trim(void);
-
-	//设置长度，即将最后一个字符设为0，需要先调用grow()
 	void	setlen(size_type len)
 	{
 		d_cplength = len;
 		ptr()[len] = (utf32)(0);
 	}
-
-	// initialise string object
 	void	init(void)
 	{
 		d_reserve			= STR_QUICKBUFF_SIZE;
@@ -4624,7 +2154,7 @@ private:
 			return true;
 	}
 
-	// compute distance between two iterators, returning a 'safe' value
+	//不检测iter2是否为空值？
 	size_type safe_iter_dif(const const_iterator& iter1, const const_iterator& iter2) const
 	{
 		return (iter1.d_ptr == 0) ? 0 : (iter1 - iter2);
@@ -4688,6 +2218,7 @@ private:
 		return dest_len - destCapacity;
 	}
 
+	//返回转化后剩余的缓冲区长度
 	size_type encode(const utf8* src, utf32* dest, size_type dest_len, size_type src_len = 0) const
 	{
 		// count length for null terminated source...
@@ -4734,7 +2265,7 @@ private:
 		return dest_len - destCapacity;
 	}
 
-	// return the number of utf8 code units required to encode the given utf32 code point
+	//utf32字符对应的utf8字符长度长度
 	size_type encoded_size(utf32 code_point) const
 	{
 		if (code_point < 0x80)
@@ -4747,13 +2278,13 @@ private:
 			return 4;
 	}
 
-	// return number of code units required to re-encode given null-terminated utf32 data as utf8.  return does not include terminating null.
+	//utf32转化为utf8所需的长度，不包含结束符
 	size_type encoded_size(const utf32* buf) const
 	{
 		return encoded_size(buf, utf_length(buf));
 	}
 
-	// return number of code units required to re-encode given utf32 data as utf8.   len is number of code units in 'buf'.
+	//utf32转化为utf8所需的长度
 	size_type encoded_size(const utf32* buf, size_type len) const
 	{
 		size_type count = 0;
@@ -4766,13 +2297,13 @@ private:
 		return count;
 	}
 
-	// return number of utf32 code units required to re-encode given utf8 data as utf32.  return does not include terminating null.
+	//utf8转化为utf32所需的长度，不包含结束符
 	size_type encoded_size(const utf8* buf) const
 	{
 		return encoded_size(buf, utf_length(buf));
 	}
 
-	// return number of utf32 code units required to re-encode given utf8 data as utf32.  len is number of code units in 'buf'.
+	//utf8的字符串长度，包含结尾符0
 	size_type encoded_size(const utf8* buf, size_type len) const
 	{
 		utf8 tcp;
@@ -4812,7 +2343,7 @@ private:
 		return count;
 	}
 
-	// return number of code units in a null terminated string
+	//utf8字节长度，不包含0
 	size_type utf_length(const utf8* utf8_str) const
 	{
 		size_type cnt = 0;
@@ -4974,442 +2505,68 @@ private:
 
 };
 
-
-//////////////////////////////////////////////////////////////////////////
-// Comparison operators
-//////////////////////////////////////////////////////////////////////////
-/*!
-\brief
-	Return true if String \a str1 is equal to String \a str2
-*/
+//在类的外部，是全局函数
 bool operator==(const String& str1, const String& str2);
-
-/*!
-\brief
-	Return true if String \a str is equal to std::string \a std_str
-*/
 bool operator==(const String& str, const std::string& std_str);
-
-/*!
-\brief
-	Return true if String \a str is equal to std::string \a std_str
-*/
 bool operator==(const std::string& std_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is equal to null-terminated utf8 data \a utf8_str
-*/
 bool operator==(const String& str, const utf8* utf8_str);
-
-/*!
-\brief
-	Return true if String \a str is equal to null-terminated utf8 data \a utf8_str
-*/
 bool operator==(const utf8* utf8_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str1 is not equal to String \a str2
-*/
 bool operator!=(const String& str1, const String& str2);
-
-/*!
-\brief
-	Return true if String \a str is not equal to std::string \a std_str
-*/
 bool operator!=(const String& str, const std::string& std_str);
-
-/*!
-\brief
-	Return true if String \a str is not equal to std::string \a std_str
-*/
 bool operator!=(const std::string& std_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is not equal to null-terminated utf8 data \a utf8_str
-*/
 bool operator!=(const String& str, const utf8* utf8_str);
-
-/*!
-\brief
-	Return true if String \a str is not equal to null-terminated utf8 data \a utf8_str
-*/
 bool operator!=(const utf8* utf8_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str1 is lexicographically less than String \a str2
-*/
 bool operator<(const String& str1, const String& str2);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically less than std::string \a std_str
-*/
 bool operator<(const String& str, const std::string& std_str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically less than std::string \a std_str
-*/
 bool operator<(const std::string& std_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically less than null-terminated utf8 data \a utf8_str
-*/
 bool operator<(const String& str, const utf8* utf8_str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically less than null-terminated utf8 data \a utf8_str
-*/
 bool operator<(const utf8* utf8_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str1 is lexicographically greater than String \a str2
-*/
 bool operator>(const String& str1, const String& str2);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically greater than std::string \a std_str
-*/
 bool operator>(const String& str, const std::string& std_str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically greater than std::string \a std_str
-*/
 bool operator>(const std::string& std_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically greater than null-terminated utf8 data \a utf8_str
-*/
 bool operator>(const String& str, const utf8* utf8_str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically greater than null-terminated utf8 data \a utf8_str
-*/
 bool operator>(const utf8* utf8_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str1 is lexicographically less than or equal to String \a str2
-*/
 bool operator<=(const String& str1, const String& str2);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically less than or equal to std::string \a std_str
-*/
 bool operator<=(const String& str, const std::string& std_str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically less than or equal to std::string \a std_str
-*/
 bool operator<=(const std::string& std_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically less than or equal to null-terminated utf8 data \a utf8_str
-*/
 bool operator<=(const String& str, const utf8* utf8_str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically less than or equal to null-terminated utf8 data \a utf8_str
-*/
 bool operator<=(const utf8* utf8_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str1 is lexicographically greater than or equal to String \a str2
-*/
 bool operator>=(const String& str1, const String& str2);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically greater than or equal to std::string \a std_str
-*/
 bool operator>=(const String& str, const std::string& std_str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically greater than or equal to std::string \a std_str
-*/
 bool operator>=(const std::string& std_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically greater than or equal to null-terminated utf8 data \a utf8_str
-*/
 bool operator>=(const String& str, const utf8* utf8_str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically greater than or equal to null-terminated utf8 data \a utf8_str
-*/
 bool operator>=(const utf8* utf8_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is equal to c-string \a c_str
-*/
 bool operator==(const String& str, const char* c_str);
-
-/*!
-\brief
-	Return true if c-string \a c_str is equal to String \a str
-*/
 bool operator==(const char* c_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is not equal to c-string \a c_str
-*/
 bool operator!=(const String& str, const char* c_str);
-
-/*!
-\brief
-	Return true if c-string \a c_str is not equal to String \a str
-*/
 bool operator!=(const char* c_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically less than c-string \a c_str
-*/
 bool operator<(const String& str, const char* c_str);
-
-/*!
-\brief
-	Return true if c-string \a c_str is lexicographically less than String \a str
-*/
 bool operator<(const char* c_str, const String& str);
-
-/*!
-\brief
-Return true if String \a str is lexicographically greater than c-string \a c_str
-*/
 bool operator>(const String& str, const char* c_str);
-
-/*!
-\brief
-Return true if c-string \a c_str is lexicographically greater than String \a str
-*/
 bool operator>(const char* c_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically less than or equal to c-string \a c_str
-*/
 bool operator<=(const String& str, const char* c_str);
-
-/*!
-\brief
-	Return true if c-string \a c_str is lexicographically less than or equal to String \a str
-*/
 bool operator<=(const char* c_str, const String& str);
-
-/*!
-\brief
-	Return true if String \a str is lexicographically greater than or equal to c-string \a c_str
-*/
 bool operator>=(const String& str, const char* c_str);
-
-/*!
-\brief
-	Return true if c-string \a c_str is lexicographically greater than or equal to String \a str
-*/
 bool operator>=(const char* c_str, const String& str);
-
-//////////////////////////////////////////////////////////////////////////
-// Concatenation operator functions
-//////////////////////////////////////////////////////////////////////////
-/*!
-\brief
-	Return String object that is the concatenation of the given inputs
-
-\param str1
-	String object describing first part of the new string
-
-\param str2
-	String object describing the second part of the new string
-
-\return
-	A String object that is the concatenation of \a str1 and \a str2
-
-\exception std::length_error	Thrown if the resulting String would be too large.
-*/
+//exception std::length_error	Thrown if the resulting String would be too large.
 String operator+(const String& str1, const String& str2);
-
-/*!
-\brief
-	Return String object that is the concatenation of the given inputs
-
-\param str
-	String object describing first part of the new string
-
-\param std_str
-	std::string object describing the second part of the new string
-
-\return
-	A String object that is the concatenation of \a str and \a std_str
-
-\exception std::length_error	Thrown if the resulting String would be too large.
-*/
+//exception std::length_error	Thrown if the resulting String would be too large.
 String operator+(const String& str, const std::string& std_str);
-
-/*!
-\brief
-	Return String object that is the concatenation of the given inputs
-
-\param std_str
-	std::string object describing the first part of the new string
-
-\param str
-	String object describing the second part of the new string
-
-\return
-	A String object that is the concatenation of \a std_str and \a str
-
-\exception std::length_error	Thrown if the resulting String would be too large.
-*/
+//exception std::length_error	Thrown if the resulting String would be too large.
 String operator+(const std::string& std_str, const String& str);
-
-/*!
-\brief
-	Return String object that is the concatenation of the given inputs
-
-\param str
-	String object describing first part of the new string
-
-\param utf8_str
-	Buffer containing null-terminated utf8 encoded data describing the second part of the new string
-
-\return
-	A String object that is the concatenation of \a str and \a utf8_str
-
-\exception std::length_error	Thrown if the resulting String would be too large.
-*/
+//exception std::length_error	Thrown if the resulting String would be too large.
 String operator+(const String& str, const utf8* utf8_str);
-
-/*!
-\brief
-	Return String object that is the concatenation of the given inputs
-
-\param utf8_str
-	Buffer containing null-terminated utf8 encoded data describing the first part of the new string
-
-\param str
-	String object describing the second part of the new string
-
-\return
-	A String object that is the concatenation of \a str and \a utf8_str
-
-\exception std::length_error	Thrown if the resulting String would be too large.
-*/
+//exception std::length_error	Thrown if the resulting String would be too large.
 String operator+(const utf8* utf8_str, const String& str);
-
-/*!
-\brief
-	Return String object that is the concatenation of the given inputs
-
-\param str
-	String object describing the first part of the new string
-
-\param code_point
-	utf32 code point describing the second part of the new string
-
-\return
-	A String object that is the concatenation of \a str and \a code_point
-
-\exception std::length_error	Thrown if the resulting String would be too large.
-*/
+//exception std::length_error	Thrown if the resulting String would be too large.
 String operator+(const String& str, utf32 code_point);
-
-/*!
-\brief
-	Return String object that is the concatenation of the given inputs
-
-\param code_point
-	utf32 code point describing the first part of the new string
-
-\param str
-	String object describing the second part of the new string
-
-\return
-	A String object that is the concatenation of \a code_point and \a str
-
-\exception std::length_error	Thrown if the resulting String would be too large.
-*/
+//exception std::length_error	Thrown if the resulting String would be too large.
 String operator+(utf32 code_point, const String& str);
-
-/*!
-\brief
-	Return String object that is the concatenation of the given inputs
-
-\param str
-	String object describing first part of the new string
-
-\param c_str
-	c-string describing the second part of the new string
-
-\return
-	A String object that is the concatenation of \a str and \a c_str
-
-\exception std::length_error	Thrown if the resulting String would be too large.
-*/
+//exception std::length_error	Thrown if the resulting String would be too large.
 String operator+(const String& str, const char* c_str);
-
-/*!
-\brief
-	Return String object that is the concatenation of the given inputs
-
-\param c_str
-	c-string describing the first part of the new string
-
-\param str
-	String object describing the second part of the new string
-
-\return
-	A String object that is the concatenation of \a c_str and \a str
-
-\exception std::length_error	Thrown if the resulting String would be too large.
-*/
+//exception std::length_error	Thrown if the resulting String would be too large.
 String operator+(const char* c_str, const String& str);
-
-
-//////////////////////////////////////////////////////////////////////////
-// Output (stream) functions
-//////////////////////////////////////////////////////////////////////////
 std::ostream& operator<<(std::ostream& s, const String& str);
-
-
-//////////////////////////////////////////////////////////////////////////
-// Modifying operations
-//////////////////////////////////////////////////////////////////////////
-/*!
-\brief
-	Swap the contents for two String objects
-
-\param str1
-	String object who's contents are to be swapped with \a str2
-
-\param str2
-	String object who's contents are to be swapped with \a str1
-
-\return
-	Nothing
-*/
 void swap(String& str1, String& str2);
-
 
 };
