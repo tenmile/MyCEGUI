@@ -1,0 +1,76 @@
+#pragma once
+
+#include "CEGUIXMLHandler.h"
+#include "CEGUIString.h"
+
+// Start of CEGUI namespace section
+namespace CEGUI
+{
+//! Class used to parse the Imageset XML files to create Imageset objects
+class Imageset_xmlHandler : public XMLHandler
+{
+public:
+	//! Constructor.
+	Imageset_xmlHandler(const String& filename, const String& resource_group);
+
+	//! Destructor.
+	~Imageset_xmlHandler();
+
+	//! Return string holding the name of the created Imageset.
+	const String& getObjectName() const;
+
+	//! Return reference to the created Imageset object.
+	Imageset& getObject() const;
+
+	// XMLHandler overrides
+	void elementStart(const String& element, const XMLAttributes& attributes);
+	void elementEnd(const String& element);
+
+private:
+	//! Method that handles the opening Imageset XML element.
+	void elementImagesetStart(const XMLAttributes& attributes);
+	//! Method that handles the Image XML element.
+	void elementImageStart(const XMLAttributes& attributes);
+	//! Method that handles the closing Imageset XML element.
+	void elementImagesetEnd();
+
+	//! Filename of the XML schema used for validating Imageset files.
+	static const String ImagesetSchemaName;
+	//! Tag name for Imageset elements.
+	static const String ImagesetElement;
+	//! Tag name for Image elements.
+	static const String ImageElement;
+	//! Attribute name that stores the name of the Imageset
+	static const String ImagesetNameAttribute;
+	//! Attribute name that stores the filename for the image file.
+	static const String ImagesetImageFileAttribute;
+	//! Attribute name that stores resource group used when loading image file.
+	static const String ImagesetResourceGroupAttribute;
+	//! Attribute that stores 'native' horizontal resolution for the Imageset.
+	static const String ImagesetNativeHorzResAttribute;
+	//! Attribute that stores 'native' vertical resolution for the Imageset.
+	static const String ImagesetNativeVertResAttribute;
+	//! Attribute that specifies whether the Imageset should be auto-scaled.
+	static const String ImagesetAutoScaledAttribute;
+	//! Attribute name that stores the name of the new Image.
+	static const String ImageNameAttribute;
+	//! Attribute name that stores the x position of the new Image.
+	static const String ImageXPosAttribute;
+	//! Attribute name that stores the y position of the new Image.
+	static const String ImageYPosAttribute;
+	//! Attribute name that stores the width of the new Image.
+	static const String ImageWidthAttribute;
+	//! Attribute name that stores the height of the new Image.
+	static const String ImageHeightAttribute;
+	//! Attribute name that stores the x rendering offset of the new Image.
+	static const String ImageXOffsetAttribute;
+	//!< Attribute name that stores the y rendering offset of the new Image.
+	static const String ImageYOffsetAttribute;
+
+	//! Pointer to the Imageset created.
+	Imageset* d_imageset;
+	//! inidcates whether client read the created object
+	mutable bool d_objectRead;
+};
+
+}

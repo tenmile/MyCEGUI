@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EF1419BA-FBC3-437F-AC41-EDEA9EC81E95}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>MyCEGUI</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\MyCEGUI\MyCEGUI\cegui;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="cegui\CEGUIBoundSlot.cpp" />
+    <ClCompile Include="cegui\CEGUIDefaultLogger.cpp" />
+    <ClCompile Include="cegui\CEGUIEvent.cpp" />
+    <ClCompile Include="cegui\CEGUIEventSet.cpp" />
+    <ClCompile Include="cegui\CEGUIGlobalEventSet.cpp" />
+    <ClCompile Include="cegui\CEGUILogger.cpp" />
+    <ClCompile Include="cegui\CEGUIMouseCursor.cpp" />
+    <ClCompile Include="cegui\CEGUIScriptModule.cpp" />
+    <ClCompile Include="cegui\CEGUIString.cpp" />
+    <ClCompile Include="cegui\CEGUISubscriberSlot.cpp" />
+    <ClCompile Include="cegui\CEGUISystem.cpp" />
+    <ClCompile Include="Sample\GameSample.cpp" />
+    <ClCompile Include="Sample\GameWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cegui\CEGUI.h" />
+    <ClInclude Include="cegui\CEGUIBase.h" />
+    <ClInclude Include="cegui\CEGUIBoundSlot.h" />
+    <ClInclude Include="cegui\CEGUIcolour.h" />
+    <ClInclude Include="cegui\CEGUIColourRect.h" />
+    <ClInclude Include="cegui\CEGUIConfig.h" />
+    <ClInclude Include="cegui\CEGUIDefaultLogger.h" />
+    <ClInclude Include="cegui\CEGUIEvent.h" />
+    <ClInclude Include="cegui\CEGUIEventArgs.h" />
+    <ClInclude Include="cegui\CEGUIEventSet.h" />
+    <ClInclude Include="cegui\CEGUIExceptions.h" />
+    <ClInclude Include="cegui\CEGUIForwardRefs.h" />
+    <ClInclude Include="cegui\CEGUIFreeFunctionSlot.h" />
+    <ClInclude Include="cegui\CEGUIFunctorCopySlot.h" />
+    <ClInclude Include="cegui\CEGUIFunctorPointerSlot.h" />
+    <ClInclude Include="cegui\CEGUIFunctorReferenceBinder.h" />
+    <ClInclude Include="cegui\CEGUIFunctorReferenceSlot.h" />
+    <ClInclude Include="cegui\CEGUIGlobalEventSet.h" />
+    <ClInclude Include="cegui\CEGUIImage.h" />
+    <ClInclude Include="cegui\CEGUIInputEvent.h" />
+    <ClInclude Include="cegui\CEGUIIteratorBase.h" />
+    <ClInclude Include="cegui\CEGUILogger.h" />
+    <ClInclude Include="cegui\CEGUIMemberFunctionSlot.h" />
+    <ClInclude Include="cegui\CEGUIMouseCursor.h" />
+    <ClInclude Include="cegui\CEGUIRect.h" />
+    <ClInclude Include="cegui\CEGUIRefCounted.h" />
+    <ClInclude Include="cegui\CEGUIRenderer.h" />
+    <ClInclude Include="cegui\CEGUIScriptModule.h" />
+    <ClInclude Include="cegui\CEGUISingleton.h" />
+    <ClInclude Include="cegui\CEGUISize.h" />
+    <ClInclude Include="cegui\CEGUISlotFunctorBase.h" />
+    <ClInclude Include="cegui\CEGUIString.h" />
+    <ClInclude Include="cegui\CEGUISubscriberSlot.h" />
+    <ClInclude Include="cegui\CEGUISystem.h" />
+    <ClInclude Include="cegui\CEGUIUDim.h" />
+    <ClInclude Include="cegui\CEGUIVector.h" />
+    <ClInclude Include="cegui\CEGUIVersion.h" />
+    <ClInclude Include="Sample\GameSample.h" />
+    <ClInclude Include="Sample\GameWindow.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
