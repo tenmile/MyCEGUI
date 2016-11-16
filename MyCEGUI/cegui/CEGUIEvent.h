@@ -1,3 +1,5 @@
+#pragma once
+
 #include "CEGUIString.h"
 #include "CEGUIBoundSlot.h"
 #include "CEGUISubscriberSlot.h"
