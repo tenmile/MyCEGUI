@@ -5,10 +5,7 @@
 namespace CEGUI
 {
 
-/*!
-\brief
-	Class that holds the size (width & height) of something.
-*/
+//¥Û–°d_width, d_height
 class Size
 {
 public:

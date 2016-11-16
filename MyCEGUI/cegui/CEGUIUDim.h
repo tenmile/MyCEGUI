@@ -213,6 +213,7 @@ public:
 \brief
     Area rectangle class built using unified dimensions (UDims).
 */
+//通过左上角的点和右下角的点来定义
 class URect
 {
 public:
@@ -309,16 +310,7 @@ public:
     UVector2 d_min, d_max;
 };
 
-/*!
-\brief
-    Class encapsulating the 'Unified Box' - this is usually used for margin
-
-\par
-    top, left, right and bottom represent offsets on each edge
-
-\note
-    Name taken from W3 'box model'
-*/
+//通过四条线来定义
 class UBox      //注意UBox和URect的区别
 {
 public:

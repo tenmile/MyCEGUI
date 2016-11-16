@@ -6,113 +6,26 @@
 
 namespace CEGUI
 {
-/*!
-\brief
-	Class encapsulating operations on a Rectangle
-*/
+
+//通过四条线来定义一个矩形
 class Rect
 {
 public:
 	Rect(void) {}
-
-
-	/*!
-	\brief
-		Constructor for a Rect.
-	*/
 	Rect(float left, float top, float right, float bottom);
-
     Rect(Point pos, Size sz);
-
-
-	/*!
-	\brief
-		Return top-left postion of Rect as a Point
-	*/
+	//返回左上角的点
 	Point	getPosition(void) const		{return Point(d_left, d_top);}
-
-	/*!
-	\brief
-		return width of Rect area
-	*/
 	float	getWidth(void) const		{return d_right - d_left;}
-
-
-	/*!
-	\brief
-		return height of Rect area
-	*/
 	float	getHeight(void) const		{return d_bottom - d_top;}
-
-
-	/*!
-	\brief
-		return the size of the Rect area
-	*/
 	Size	getSize(void) const			{return Size(getWidth(), getHeight());}
-
-
-	/*!
-	\brief
-		set the position of the Rect (leaves size in tact)
-	*/
 	void	setPosition(const Point& pt);
-
-
-	/*!
-	\brief
-		set the width of the Rect object
-	*/
 	void	setWidth(float width)		{d_right = d_left + width;}
-
-	/*!
-	\brief
-		set the height of the Rect object
-	*/
 	void	setHeight(float height)		{d_bottom = d_top + height;}
-
-
-	/*!
-	\brief
-		set the size of the Rect area
-	*/
 	void	setSize(const Size& sze)	{setWidth(sze.d_width); setHeight(sze.d_height);}
-
-
-	/*!
-	\brief
-		return a Rect that is the intersection of 'this' Rect with the Rect 'rect'
-
-	\note
-		It can be assumed that if d_left == d_right, or d_top == d_bottom, or getWidth() == 0, or getHeight() == 0, then
-		'this' rect was totally outside 'rect'.
-	*/
 	Rect	getIntersection(const Rect& rect) const;
-
-
-	/*!
-	\brief
-		Applies an offset the Rect object
-
-	\param pt
-		Point object containing the offsets to be applied to the Rect.
-
-	\return
-		this Rect after the offset is performed
-	*/
+	//将矩形进行偏移
 	Rect&	offset(const Point& pt);
-
-
-	/*!
-	\brief
-		Return true if the given Point falls within this Rect
-
-	\param pt
-		Point object describing the position to test.
-
-	\return
-		true if position \a pt is within this Rect's area, else false
-	*/
 	bool	isPointInRect(const Point& pt) const;
 
 

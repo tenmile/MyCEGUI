@@ -7,10 +7,7 @@
 namespace CEGUI
 {
 
-/*!
-\brief
- Class used as a two dimensional vector (aka a Point)
-*/
+//平面点(x,y)
 class Vector2
 {
 public:
@@ -85,17 +82,11 @@ public:
     float d_x, d_y;
 };
 
-/*!
-\brief
- Point class
-*/
+
 typedef Vector2  Point;
 
 
-/*!
-\brief
- Class used as a three dimensional vector
-*/
+//立体点(x,y,z)
 class Vector3
 {
 public:
