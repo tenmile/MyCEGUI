@@ -5,13 +5,10 @@
 #include "CEGUIString.h"
 #include "CEGUIVector.h"
 
-
 namespace CEGUI
 {
-/*!
-\brief
-	struct to give scope to scan code enumeration.
-*/
+
+//按键的枚举值
 struct Key
 {
 	// enumeration of scan codes.  Customised from table taken from Ogre, which took them from DirectInput...
@@ -165,11 +162,7 @@ struct Key
 
 };
 
-
-/*!
-\brief
-    Enumeration of mouse buttons
-*/
+//鼠标事件的枚举值
 enum MouseButton
 {
     //! The left mouse button.
@@ -188,11 +181,7 @@ enum MouseButton
     NoButton
 };
 
-
-/*!
-\brief
-	System key flag values
-*/
+//系统按键的标志值
 enum SystemKey
 {
 	LeftMouse		= 0x0001,			//!< The left mouse button.
@@ -205,12 +194,8 @@ enum SystemKey
 	Alt				= 0x0080			//!< Either alt key.
 };
 
-
-/*!
-\brief
-	EventArgs based class that is used for objects passed to handlers triggered for events
-	concerning some Window object.
-*/
+//保存触发事件的窗口对象指针
+//WindowEventArgs class that is primarily used by lua scripts
 class WindowEventArgs : public EventArgs
 {
 public:
