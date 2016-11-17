@@ -79,6 +79,7 @@ String PropertySet::getProperty(const String& name) const
 		CEGUI_THROW(UnknownObjectException("There is no Property named '" + name + "' available in the set."));
 	}
 
+	//传入的是当前窗口指针
 	return pos->second->get(this);
 }
 
@@ -93,7 +94,7 @@ void PropertySet::setProperty(const String& name,const String& value)
 	{
 		CEGUI_THROW(UnknownObjectException("There is no Property named '" + name + "' available in the set."));
 	}
-
+	//传入的是当前窗口指针
 	pos->second->set(this, value);
 }
 

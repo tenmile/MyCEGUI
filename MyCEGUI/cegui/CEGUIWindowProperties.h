@@ -7,11 +7,6 @@
 namespace CEGUI
 {
 
-// Start of WindowProperties namespace section
-/*!
-\brief
-	Namespace containing all classes that make up the properties interface for the Window base class
-*/
 namespace WindowProperties
 {
 /*!
@@ -35,7 +30,7 @@ public:
 		"Property to get/set the ID value of the Window.  Value is an unsigned integer number.",
 		"0")
 	{}
-
+	//传入的是窗口的指针，具体的数据存在窗口内
 	String	get(const PropertyReceiver* receiver) const;
 	void	set(PropertyReceiver* receiver, const String& value);
 };

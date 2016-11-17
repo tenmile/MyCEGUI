@@ -5,10 +5,8 @@
 
 namespace CEGUI
 {
-/*!
-\brief
-	Helper class used to convert various data types to and from the format expected in Propery strings
-*/
+
+//各种相关类型转换
 class PropertyHelper
 {
 public:
