@@ -65,96 +65,19 @@ public:
 	/*************************************************************************
 		Window Related Methods
 	*************************************************************************/
-	/*!
-	\brief
-		Creates a new Window object of the specified type, and gives it the specified unique name.
-
-	\param type
-		String that describes the type of Window to be created.  A valid WindowFactory for the specified type must be registered.
-
-	\param name
-		String that holds a unique name that is to be given to the new window.  If this string is empty (""), a name
-		will be generated for the window.
-
-	\return
-		Pointer to the newly created Window object.
-
-    \exception  InvalidRequestException WindowManager is locked and no Windows
-                                        may be created.
-	\exception	AlreadyExistsException		A Window object with the name \a name already exists.
-	\exception	UnknownObjectException		No WindowFactory is registered for \a type Window objects.
-	\exception	GenericException			Some other error occurred (Exception message has details).
-	*/
+    //exception  InvalidRequestException WindowManager is locked and no Windows may be created.
+	//exception	AlreadyExistsException		A Window object with the name \a name already exists.
+	//exception	UnknownObjectException		No WindowFactory is registered for \a type Window objects.
+	//exception	GenericException			Some other error occurred (Exception message has details).
 	Window* createWindow(const String& type, const String& name = "");
-
-
-	/*!
-	\brief
-		Destroy the specified Window object.
-
-	\param window
-		Pointer to the Window object to be destroyed.  If the \a window is null, or is not recognised, nothing happens.
-
-	\return
-		Nothing
-
-	\exception	InvalidRequestException		Can be thrown if the WindowFactory for \a window's object type was removed.
-	*/
+	//exception	InvalidRequestException		Can be thrown if the WindowFactory for \a window's object type was removed.
 	void	destroyWindow(Window* window);
-
-
-	/*!
-	\brief
-		Destroy the specified Window object.
-
-	\param
-		window	String containing the name of the Window object to be destroyed.  If \a window is not recognised, nothing happens.
-
-	\return
-		Nothing.
-
-	\exception	InvalidRequestException		Can be thrown if the WindowFactory for \a window's object type was removed.
-	*/
+	//exception	InvalidRequestException		Can be thrown if the WindowFactory for \a window's object type was removed.
 	void	destroyWindow(const String& window);
-
-
-	/*!
-	\brief
-		Return a pointer to the specified Window object.
-
-	\param name
-		String holding the name of the Window object to be returned.
-
-	\return
-		Pointer to the Window object with the name \a name.
-
-	\exception UnknownObjectException	No Window object with a name matching \a name was found.
-	*/
+	//exception UnknownObjectException	No Window object with a name matching \a name was found.
 	Window*	getWindow(const String& name) const;
-
-
-	/*!
-	\brief
-		Examines the list of Window objects to see if one exists with the given name
-
-	\param name
-		String holding the name of the Window object to look for.
-
-	\return
-		true if a Window object was found with a name matching \a name.  false if no matching Window object was found.
-	*/
 	bool	isWindowPresent(const String& name) const;
-
-
-	/*!
-	\brief
-		Destroys all Window objects within the system
-
-	\return
-		Nothing.
-
-	\exception	InvalidRequestException		Thrown if the WindowFactory for any Window object type has been removed.
-	*/
+	//exception	InvalidRequestException		Thrown if the WindowFactory for any Window object type has been removed.
 	void	destroyAllWindows(void);
 
 
@@ -190,14 +113,6 @@ public:
 	*/
 	Window*	loadWindowLayout(const String& filename, const String& name_prefix = "", const String& resourceGroup = "", PropertyCallback* callback = 0, void* userdata = 0);
 
-    /*!
-    \brief
-        Return whether the window dead pool is empty.
-
-    \return
-        - true if there are no windows in the dead pool.
-        - false if the dead pool contains >=1 window awaiting destruction.
-    */
     bool isDeadPoolEmpty(void) const;
 
     /*!
@@ -292,119 +207,25 @@ public:
     */
     void saveWindowLayout(const Window& window, const String& filename, const bool writeParent = false) const;
 
-    /*!
-    \brief
-        Rename a window.
-
-    \param window
-        String holding the current name of the window to be renamed.
-
-    \param new_name
-        String holding the new name for the window
-
-    \exception UnknownObjectException
-        thrown if \a window is not known in the system.
-
-    \exception AlreadyExistsException
-        thrown if a Window named \a new_name already exists.
-    */
+    //exception UnknownObjectException thrown if \a window is not known in the system.
+    //exception AlreadyExistsException thrown if a Window named \a new_name already exists.
     void renameWindow(const String& window, const String& new_name);
-
-    /*!
-    \brief
-        Rename a window.
-
-    \param window
-        Pointer to the window to be renamed.
-
-    \param new_name
-        String holding the new name for the window
-
-    \exception AlreadyExistsException
-        thrown if a Window named \a new_name already exists.
-    */
+    //exception AlreadyExistsException thrown if a Window named \a new_name already exists.
     void renameWindow(Window* window, const String& new_name);
-
-    /*!
-    \brief
-        Returns the default resource group currently set for layouts.
-
-    \return
-        String describing the default resource group identifier that will be
-        used when loading layouts.
-    */
     static const String& getDefaultResourceGroup()
         { return d_defaultResourceGroup; }
-
-    /*!
-    \brief
-        Sets the default resource group to be used when loading layouts
-
-    \param resourceGroup
-        String describing the default resource group identifier to be used.
-
-    \return
-        Nothing.
-    */
     static void setDefaultResourceGroup(const String& resourceGroup)
         { d_defaultResourceGroup = resourceGroup; }
 
-    /*!
-    \brief
-        Put WindowManager into the locked state.
-
-        While WindowManager is in the locked state all attempts to create a
-        Window of any type will fail with an InvalidRequestException being
-        thrown.  Calls to lock/unlock are recursive; if multiple calls to lock
-        are made, WindowManager is only unlocked after a matching number of
-        calls to unlock.
-
-    \note
-        This is primarily intended for internal use within the system.
-    */
     void lock();
-
-    /*!
-    \brief
-        Put WindowManager into the unlocked state.
-
-        While WindowManager is in the locked state all attempts to create a
-        Window of any type will fail with an InvalidRequestException being
-        thrown.  Calls to lock/unlock are recursive; if multiple calls to lock
-        are made, WindowManager is only unlocked after a matching number of
-        calls to unlock.
-
-    \note
-        This is primarily intended for internal use within the system.
-    */
     void unlock();
-
-    /*!
-    \brief
-        Returns whether WindowManager is currently in the locked state.
-
-        While WindowManager is in the locked state all attempts to create a
-        Window of any type will fail with an InvalidRequestException being
-        thrown.  Calls to lock/unlock are recursive; if multiple calls to lock
-        are made, WindowManager is only unlocked after a matching number of
-        calls to unlock.
-
-    \return
-        - true to indicate WindowManager is locked and that any attempt to
-        create Window objects will fail.
-        - false to indicate WindowManager is unlocked and that Window objects
-        may be created as normal.
-    */
     bool isLocked() const;
 
 private:
     /*************************************************************************
         Implementation Methods
     *************************************************************************/
-    /*!
-    \brief
-        Implementation method to generate a unique name to use for a window.
-    */
+	//一个固定的字符串加上一个递增的数字
     String generateUniqueWindowName();
 
     //! function to set up RenderEffect on a window
@@ -435,11 +256,6 @@ public:
 		Iterator stuff
 	*************************************************************************/
 	typedef	ConstBaseIterator<WindowRegistry>	WindowIterator;
-
-	/*!
-	\brief
-		Return a WindowManager::WindowIterator object to iterate over the currently defined Windows.
-	*/
 	WindowIterator	getIterator(void) const;
 
     /*!

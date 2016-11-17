@@ -120,67 +120,12 @@ public:
 
     void removeFalagardWindowMapping(const String& type);
     bool isFalagardMappedType(const String& type) const;
-
-    /*!
-    \brief
-        Return the name of the LookN'Feel assigned to the specified window mapping.
-
-    \param type
-        Name of a window type.  The window type referenced should be a falagard mapped type.
-
-    \return
-        String object holding the name of the look mapped for the requested type.
-
-    \exception InvalidRequestException thrown if \a type is not a falagard mapping type (or maybe the type didn't exist).
-    */
+    //exception InvalidRequestException thrown if \a type is not a falagard mapping type (or maybe the type didn't exist).
     const String& getMappedLookForType(const String& type) const;
-
-    /*!
-    \brief
-        Return the name of the WindowRenderer assigned to the specified window mapping.
-
-    \param type
-        Name of a window type.  The window type referenced should be a falagard mapped type.
-
-    \return
-        String object holding the name of the window renderer mapped for the requested type.
-
-    \exception InvalidRequestException thrown if \a type is not a falagard mapping type (or maybe the type didn't exist).
-    */
+    //exception InvalidRequestException thrown if \a type is not a falagard mapping type (or maybe the type didn't exist).
     const String& getMappedRendererForType(const String& type) const;
-
-    /*!
-    \brief
-        Use the alias system, where required, to 'de-reference' the specified
-        type to an actual window type that can be created directly (that being
-        either a concrete window type, or a falagard mapped type).
-
-    \note
-        Even though implied by the above description, this method does not
-        check that a factory for the final type exists; we simply say that the
-        returned type is not an alias for some other type.
-
-    \param type
-        String describing the type to be de-referenced.
-
-    \return
-        String object holding a type for a window that can be created directly;
-        that is, a type that does not describe an alias to some other type.
-    */
     String getDereferencedAliasType(const String& type) const;
-
-    /*!
-    \brief
-        Return the FalagardWindowMapping for the specified window mapping \a type.
-
-    \param type
-        Name of a window type.  The window type referenced should be a falagard mapped type.
-
-    \return
-        FalagardWindowMapping object describing the falagard mapping.
-
-    \exception InvalidRequestException thrown if \a type is not a falagard mapping type (or maybe the type didn't exist).
-    */
+    //exception InvalidRequestException thrown if \a type is not a falagard mapping type (or maybe the type didn't exist).
     const FalagardWindowMapping& getFalagardMappingForType(const String& type) const;
 
 private:
@@ -207,24 +152,8 @@ public:
 	typedef ConstBaseIterator<TypeAliasRegistry>		TypeAliasIterator;
     typedef ConstBaseIterator<FalagardMapRegistry>      FalagardMappingIterator;
 
-	/*!
-	\brief
-		Return a WindowFactoryManager::WindowFactoryIterator object to iterate over the available WindowFactory types.
-	*/
 	WindowFactoryIterator	getIterator(void) const;
-
-
-	/*!
-	\brief
-		Return a WindowFactoryManager::TypeAliasIterator object to iterate over the defined aliases for window types.
-	*/
 	TypeAliasIterator	getAliasIterator(void) const;
-
-
-    /*!
-    \brief
-        Return a WindowFactoryManager::FalagardMappingIterator object to iterate over the defined falagard window mappings.
-    */
     FalagardMappingIterator getFalagardMappingIterator() const;
 };
 

@@ -63,6 +63,7 @@ WindowManager::~WindowManager(void)
 /*************************************************************************
 	Create a new window of the specified type
 *************************************************************************/
+//name为空，会自动产生唯一的名称
 Window* WindowManager::createWindow(const String& type, const String& name)
 {
     // only allow creation of Window objects if we are in unlocked state
