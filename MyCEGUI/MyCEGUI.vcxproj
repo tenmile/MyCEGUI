@@ -82,10 +82,20 @@
     <ClCompile Include="cegui\CEGUIGlobalEventSet.cpp" />
     <ClCompile Include="cegui\CEGUILogger.cpp" />
     <ClCompile Include="cegui\CEGUIMouseCursor.cpp" />
+    <ClCompile Include="cegui\CEGUIProperty.cpp" />
+    <ClCompile Include="cegui\CEGUIPropertyHelper.cpp" />
+    <ClCompile Include="cegui\CEGUIPropertySet.cpp" />
+    <ClCompile Include="cegui\CEGUIRect.cpp" />
     <ClCompile Include="cegui\CEGUIScriptModule.cpp" />
+    <ClCompile Include="cegui\CEGUISize.cpp" />
     <ClCompile Include="cegui\CEGUIString.cpp" />
     <ClCompile Include="cegui\CEGUISubscriberSlot.cpp" />
     <ClCompile Include="cegui\CEGUISystem.cpp" />
+    <ClCompile Include="cegui\CEGUIWindow.cpp" />
+    <ClCompile Include="cegui\CEGUIWindowFactory.cpp" />
+    <ClCompile Include="cegui\CEGUIWindowFactoryManager.cpp" />
+    <ClCompile Include="cegui\CEGUIWindowManager.cpp" />
+    <ClCompile Include="cegui\CEGUIWindowProperties.cpp" />
     <ClCompile Include="Sample\GameSample.cpp" />
     <ClCompile Include="Sample\GameWindow.cpp" />
   </ItemGroup>
@@ -114,6 +124,9 @@
     <ClInclude Include="cegui\CEGUILogger.h" />
     <ClInclude Include="cegui\CEGUIMemberFunctionSlot.h" />
     <ClInclude Include="cegui\CEGUIMouseCursor.h" />
+    <ClInclude Include="cegui\CEGUIProperty.h" />
+    <ClInclude Include="cegui\CEGUIPropertyHelper.h" />
+    <ClInclude Include="cegui\CEGUIPropertySet.h" />
     <ClInclude Include="cegui\CEGUIRect.h" />
     <ClInclude Include="cegui\CEGUIRefCounted.h" />
     <ClInclude Include="cegui\CEGUIRenderer.h" />
@@ -127,6 +140,14 @@
     <ClInclude Include="cegui\CEGUIUDim.h" />
     <ClInclude Include="cegui\CEGUIVector.h" />
     <ClInclude Include="cegui\CEGUIVersion.h" />
+    <ClInclude Include="cegui\CEGUIVertex.h" />
+    <ClInclude Include="cegui\CEGUIWindow.h" />
+    <ClInclude Include="cegui\CEGUIWindowFactory.h" />
+    <ClInclude Include="cegui\CEGUIWindowFactoryManager.h" />
+    <ClInclude Include="cegui\CEGUIWindowManager.h" />
+    <ClInclude Include="cegui\CEGUIWindowProperties.h" />
+    <ClInclude Include="cegui\CEGUIXMLParser.h" />
+    <ClInclude Include="cegui\config.h" />
     <ClInclude Include="Sample\GameSample.h" />
     <ClInclude Include="Sample\GameWindow.h" />
   </ItemGroup>
