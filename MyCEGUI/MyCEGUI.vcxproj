@@ -76,12 +76,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cegui\CEGUIBoundSlot.cpp" />
+    <ClCompile Include="cegui\CEGUIDataContainer.cpp" />
     <ClCompile Include="cegui\CEGUIDefaultLogger.cpp" />
+    <ClCompile Include="cegui\CEGUIDynamicModule.cpp" />
     <ClCompile Include="cegui\CEGUIEvent.cpp" />
     <ClCompile Include="cegui\CEGUIEventSet.cpp" />
+    <ClCompile Include="cegui\CEGUIFont.cpp" />
+    <ClCompile Include="cegui\CEGUIFont_xmlHandler.cpp" />
     <ClCompile Include="cegui\CEGUIGlobalEventSet.cpp" />
+    <ClCompile Include="cegui\CEGUIGUILayout_xmlHandler.cpp" />
+    <ClCompile Include="cegui\CEGUIImage.cpp" />
+    <ClCompile Include="cegui\CEGUIImagesetManager.cpp" />
+    <ClCompile Include="cegui\CEGUIImageset_xmlHandler.cpp" />
     <ClCompile Include="cegui\CEGUILogger.cpp" />
     <ClCompile Include="cegui\CEGUIMouseCursor.cpp" />
+    <ClCompile Include="cegui\CEGUINamedXMLResourceManager.cpp" />
+    <ClCompile Include="cegui\CEGUIPixmapFont.cpp" />
     <ClCompile Include="cegui\CEGUIProperty.cpp" />
     <ClCompile Include="cegui\CEGUIPropertyHelper.cpp" />
     <ClCompile Include="cegui\CEGUIPropertySet.cpp" />
@@ -96,6 +106,10 @@
     <ClCompile Include="cegui\CEGUIWindowFactoryManager.cpp" />
     <ClCompile Include="cegui\CEGUIWindowManager.cpp" />
     <ClCompile Include="cegui\CEGUIWindowProperties.cpp" />
+    <ClCompile Include="cegui\CEGUIXMLAttributes.cpp" />
+    <ClCompile Include="cegui\CEGUIXMLHandler.cpp" />
+    <ClCompile Include="cegui\CEGUIXMLParser.cpp" />
+    <ClCompile Include="cegui\CEGUIXMLSerializer.cpp" />
     <ClCompile Include="Sample\GameSample.cpp" />
     <ClCompile Include="Sample\GameWindow.cpp" />
   </ItemGroup>
@@ -106,11 +120,16 @@
     <ClInclude Include="cegui\CEGUIcolour.h" />
     <ClInclude Include="cegui\CEGUIColourRect.h" />
     <ClInclude Include="cegui\CEGUIConfig.h" />
+    <ClInclude Include="cegui\CEGUIDataContainer.h" />
     <ClInclude Include="cegui\CEGUIDefaultLogger.h" />
+    <ClInclude Include="cegui\CEGUIDynamicModule.h" />
     <ClInclude Include="cegui\CEGUIEvent.h" />
     <ClInclude Include="cegui\CEGUIEventArgs.h" />
     <ClInclude Include="cegui\CEGUIEventSet.h" />
     <ClInclude Include="cegui\CEGUIExceptions.h" />
+    <ClInclude Include="cegui\CEGUIFont.h" />
+    <ClInclude Include="cegui\CEGUIFontGlyph.h" />
+    <ClInclude Include="cegui\CEGUIFont_xmlHandler.h" />
     <ClInclude Include="cegui\CEGUIForwardRefs.h" />
     <ClInclude Include="cegui\CEGUIFreeFunctionSlot.h" />
     <ClInclude Include="cegui\CEGUIFunctorCopySlot.h" />
@@ -118,18 +137,25 @@
     <ClInclude Include="cegui\CEGUIFunctorReferenceBinder.h" />
     <ClInclude Include="cegui\CEGUIFunctorReferenceSlot.h" />
     <ClInclude Include="cegui\CEGUIGlobalEventSet.h" />
+    <ClInclude Include="cegui\CEGUIGUILayout_xmlHandler.h" />
     <ClInclude Include="cegui\CEGUIImage.h" />
+    <ClInclude Include="cegui\CEGUIImageset.h" />
+    <ClInclude Include="cegui\CEGUIImagesetManager.h" />
+    <ClInclude Include="cegui\CEGUIImageset_xmlHandler.h" />
     <ClInclude Include="cegui\CEGUIInputEvent.h" />
     <ClInclude Include="cegui\CEGUIIteratorBase.h" />
     <ClInclude Include="cegui\CEGUILogger.h" />
     <ClInclude Include="cegui\CEGUIMemberFunctionSlot.h" />
     <ClInclude Include="cegui\CEGUIMouseCursor.h" />
+    <ClInclude Include="cegui\CEGUINamedXMLResourceManager.h" />
+    <ClInclude Include="cegui\CEGUIPixmapFont.h" />
     <ClInclude Include="cegui\CEGUIProperty.h" />
     <ClInclude Include="cegui\CEGUIPropertyHelper.h" />
     <ClInclude Include="cegui\CEGUIPropertySet.h" />
     <ClInclude Include="cegui\CEGUIRect.h" />
     <ClInclude Include="cegui\CEGUIRefCounted.h" />
     <ClInclude Include="cegui\CEGUIRenderer.h" />
+    <ClInclude Include="cegui\CEGUIResourceProvider.h" />
     <ClInclude Include="cegui\CEGUIScriptModule.h" />
     <ClInclude Include="cegui\CEGUISingleton.h" />
     <ClInclude Include="cegui\CEGUISize.h" />
@@ -137,6 +163,7 @@
     <ClInclude Include="cegui\CEGUIString.h" />
     <ClInclude Include="cegui\CEGUISubscriberSlot.h" />
     <ClInclude Include="cegui\CEGUISystem.h" />
+    <ClInclude Include="cegui\CEGUITexture.h" />
     <ClInclude Include="cegui\CEGUIUDim.h" />
     <ClInclude Include="cegui\CEGUIVector.h" />
     <ClInclude Include="cegui\CEGUIVersion.h" />
@@ -146,7 +173,10 @@
     <ClInclude Include="cegui\CEGUIWindowFactoryManager.h" />
     <ClInclude Include="cegui\CEGUIWindowManager.h" />
     <ClInclude Include="cegui\CEGUIWindowProperties.h" />
+    <ClInclude Include="cegui\CEGUIXMLAttributes.h" />
+    <ClInclude Include="cegui\CEGUIXMLHandler.h" />
     <ClInclude Include="cegui\CEGUIXMLParser.h" />
+    <ClInclude Include="cegui\CEGUIXMLSerializer.h" />
     <ClInclude Include="cegui\config.h" />
     <ClInclude Include="Sample\GameSample.h" />
     <ClInclude Include="Sample\GameWindow.h" />

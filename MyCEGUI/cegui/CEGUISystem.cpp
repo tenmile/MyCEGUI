@@ -1452,6 +1452,7 @@ void System::addStandardWindowFactories()
     WindowFactoryManager::addFactory< TplWindowFactory<GridLayoutContainer> >();
 }
 
+//加上本身一共十二个
 void System::createSingletons()
 {
     // cause creation of other singleton objects
@@ -1468,6 +1469,7 @@ void System::createSingletons()
     new RenderEffectManager();
 }
 
+//加上本身一共十二个
 void System::destroySingletons()
 {
     delete  SchemeManager::getSingletonPtr();
