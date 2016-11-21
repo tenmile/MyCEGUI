@@ -11,8 +11,6 @@
 
 #include <map>
 
-
-
 namespace CEGUI
 {
 
@@ -24,7 +22,7 @@ namespace CEGUI
 	of 'components' which can later be accessed via name.  The components of an Imageset can queried for
 	various details, and sent to the Renderer object for drawing.
 */
-class CEGUIEXPORT Imageset
+class Imageset
 {
 	typedef	std::map<String, Image, String::FastLessCompare>	ImageRegistry;
 
@@ -64,11 +62,7 @@ public:
     \exception FileIOException thrown if something goes wrong while loading the image.
     */
     Imageset(const String& name, const String& filename, const String& resourceGroup);
-
-	/*!
-	\brief
-		Destroys Imageset objects
-	*/
+	//不能被继承
 	~Imageset(void);
 
 
@@ -77,127 +71,20 @@ public:
 	/*************************************************************************
 		Public interface
 	*************************************************************************/
-	/*!
-	\brief
-		return Texture object for this Imageset
-
-	\return
-		Texture object that holds the imagery for this Imageset
-	*/
 	Texture*	getTexture(void) const						{return d_texture;}
-
-
-	/*!
-	\brief
-		return String object holding the name of the Imageset
-
-	\return	
-		String object that holds the name of the Imageset.
-	*/
 	const String&	getName(void) const						{return d_name;}
-
-
-	/*!
-	\brief
-		return number of images defined for this Imageset
-
-	\return
-		uint value equal to the number of Image objects defined for the Imageset
-	*/
 	uint      getImageCount(void) const               {return (uint)d_images.size();}
-
- 
-	/*!
-	\brief
-		return true if an Image with the specified name exists.
-
-	\param name
-		String object holding the name of the Image to look for.
-
-	\return
-		true if an Image object named \a name is defined for this Imageset, else false.
-	*/
 	bool		isImageDefined(const String& name) const	{return d_images.find(name) != d_images.end();}
-
- 
-	/*!
-	\brief
-		return a copy of the Image object for the named image
-
-	\param name
-		String object holding the name of the Image object to be returned
-
-	\return
-		constant Image object that has the requested name.
-
-	\exception UnknownObjectException	thrown if no Image named \a name is defined for the Imageset
-	*/
+	//返回副本
+	//exception UnknownObjectException	thrown if no Image named \a name is defined for the Imageset
 	const Image&	getImage(const String& name) const;
-
-
-	/*!
-	\brief
-		remove the definition for the Image with the specified name.  If no such Image exists, nothing happens.
-
-	\param name
-		String object holding the name of the Image object to be removed from the Imageset,
-	\return
-		Nothing.
-	*/
 	void	undefineImage(const String& name);
-
-	/*!
-	\brief
-		Removes the definitions for all Image objects currently defined in the Imageset
-
-	\return
-		Nothing
-	*/
 	void	undefineAllImages(void);
-
-
-	/*!
-	\brief
-		return a Size object describing the dimensions of the named image.
-
-	\param name
-		String object holding the name of the Image.
-
-	\return
-		Size object holding the dimensions of the requested Image.
-
-	\exception UnknownObjectException	thrown if no Image named \a name is defined for the Imageset
-	*/
+	//exception UnknownObjectException	thrown if no Image named \a name is defined for the Imageset
 	Size	getImageSize(const String& name) const			{return getImage(name).getSize();}
-
-
-	/*!
-	\brief
-		return the width of the named image.
-
-	\param name
-		String object holding the name of the Image.
-
-	\return
-		float value equalling the width of the requested Image.
-
-	\exception UnknownObjectException	thrown if no Image named \a name is defined for the Imageset
-	*/
+	//exception UnknownObjectException	thrown if no Image named \a name is defined for the Imageset
 	float	getImageWidth(const String& name) const			{return getImage(name).getWidth();}
-
-
-	/*!
-	\brief
-		return the height of the named image.
-
-	\param name
-		String object holding the name of the Image.
-
-	\return
-		float value equalling the height of the requested Image.
-
-	\exception UnknownObjectException	thrown if no Image named \a name is defined for the Imageset
-	*/
+	//exception UnknownObjectException	thrown if no Image named \a name is defined for the Imageset
 	float	getImageHeight(const String& name) const		{return getImage(name).getHeight();}
 
 
@@ -384,13 +271,6 @@ public:
              quad_split_mode);
     }
 
-	/*!
-	\brief
-		Return whether this Imageset is auto-scaled.
-
-	\return
-		true if Imageset is auto-scaled, false if not.
-	*/
 	bool	isAutoScaled(void) const		{return d_autoScale;}
 
 
@@ -403,17 +283,6 @@ public:
 	*/
 	Size	getNativeResolution(void) const	{return Size(d_nativeHorzRes, d_nativeVertRes);}
 
-
-	/*!
-	\brief
-		Enable or disable auto-scaling for this Imageset.
-
-	\param setting
-		true to enable auto-scaling, false to disable auto-scaling.
-
-	\return
-		Nothing.
-	*/
 	void	setAutoScalingEnabled(bool setting);
 
 
@@ -439,11 +308,6 @@ public:
     */
     void notifyDisplaySizeChanged(const Size& size);
 
-
-	/*!
-	\brief
-		Return an Imageset::ImageIterator object that can be used to iterate over the Image objects in the Imageset.
-	*/
 	ImageIterator	getIterator(void) const;
 
 
@@ -461,28 +325,10 @@ public:
         Nothing.
     */
     void writeXMLToStream(XMLSerializer& xml_stream) const;
-
-    /*!
-    \brief
-        Sets the default resource group to be used when loading imageset data
-
-    \param resourceGroup
-        String describing the default resource group identifier to be used.
-
-    \return
-        Nothing.
-    */
+	//static
     static void setDefaultResourceGroup(const String& resourceGroup)
         { d_defaultResourceGroup = resourceGroup; }
-
-    /*!
-    \brief
-        Returns the default resource group currently set for Imagesets.
-
-    \return
-        String describing the default resource group identifier that will be
-        used when loading Imageset data.
-    */
+	//static
     static const String& getDefaultResourceGroup()
         { return d_defaultResourceGroup; }
 
@@ -535,7 +381,8 @@ protected:
 	float	d_vertScaling;			//!< current vertical scaling factor.
 	float	d_nativeHorzRes;		//!< native horizontal resolution for this Imageset.
 	float	d_nativeVertRes;		//!< native vertical resolution for this Imageset.
-    static String d_defaultResourceGroup;   //!< Default resource group specifically for Imagesets.
+    //static 所有的Imageset只有一个
+	static String d_defaultResourceGroup;   //!< Default resource group specifically for Imagesets.
 };
 
 }

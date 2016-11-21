@@ -86,6 +86,7 @@
     <ClCompile Include="cegui\CEGUIGlobalEventSet.cpp" />
     <ClCompile Include="cegui\CEGUIGUILayout_xmlHandler.cpp" />
     <ClCompile Include="cegui\CEGUIImage.cpp" />
+    <ClCompile Include="cegui\CEGUIImageset.cpp" />
     <ClCompile Include="cegui\CEGUIImagesetManager.cpp" />
     <ClCompile Include="cegui\CEGUIImageset_xmlHandler.cpp" />
     <ClCompile Include="cegui\CEGUILogger.cpp" />
@@ -110,6 +111,8 @@
     <ClCompile Include="cegui\CEGUIXMLHandler.cpp" />
     <ClCompile Include="cegui\CEGUIXMLParser.cpp" />
     <ClCompile Include="cegui\CEGUIXMLSerializer.cpp" />
+    <ClCompile Include="cegui\XMLParserModules\CEGUIExpatParser.cpp" />
+    <ClCompile Include="cegui\XMLParserModules\CEGUIExpatParserModule.cpp" />
     <ClCompile Include="Sample\GameSample.cpp" />
     <ClCompile Include="Sample\GameWindow.cpp" />
   </ItemGroup>
@@ -178,6 +181,8 @@
     <ClInclude Include="cegui\CEGUIXMLParser.h" />
     <ClInclude Include="cegui\CEGUIXMLSerializer.h" />
     <ClInclude Include="cegui\config.h" />
+    <ClInclude Include="cegui\XMLParserModules\CEGUIExpatParser.h" />
+    <ClInclude Include="cegui\XMLParserModules\CEGUIExpatParserModule.h" />
     <ClInclude Include="Sample\GameSample.h" />
     <ClInclude Include="Sample\GameWindow.h" />
   </ItemGroup>
